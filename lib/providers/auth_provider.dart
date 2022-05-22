@@ -16,7 +16,7 @@ class AuthProvider with ChangeNotifier {
     String? fullname,
     String? phoneNumber,
     String? email,
-    int? pin,
+    String? pin,
     String? password,
   }) async {
     try {

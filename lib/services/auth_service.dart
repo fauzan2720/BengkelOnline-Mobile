@@ -11,7 +11,7 @@ class AuthService {
     String? fullname,
     String? phoneNumber,
     String? email,
-    int? pinNumber,
+    String? pinNumber,
     String? password,
   }) async {
     var url = '$baseUrl/register';

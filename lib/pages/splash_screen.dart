@@ -1,5 +1,7 @@
+import 'package:bengkel_online/providers/product_provider.dart';
 import 'package:bengkel_online/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreenPage extends StatelessWidget {
   const SplashScreenPage({Key? key}) : super(key: key);
@@ -7,6 +9,7 @@ class SplashScreenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: primaryColor,
       body: Stack(
         children: [
           Image.asset(
@@ -15,12 +18,14 @@ class SplashScreenPage extends StatelessWidget {
             fit: BoxFit.fill,
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(40, 188, 40, 0),
+                padding: const EdgeInsets.fromLTRB(40, 188, 40, 20),
                 child: Image.asset(
                   'assets/img/img_splashscreen.png',
                   width: double.infinity,
+                  fit: BoxFit.fill,
                 ),
               ),
               Padding(
@@ -46,6 +51,7 @@ class SplashScreenPage extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
               Container(
                 width: 190,
                 height: 40,
@@ -72,7 +78,10 @@ class SplashScreenPage extends StatelessWidget {
                 ),
                 margin: const EdgeInsets.only(top: 16),
                 child: TextButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    await Provider.of<ProductProvider>(context, listen: false)
+                        .getProducts();
+
                     Navigator.pushNamed(context, 'login');
                   },
                   child: Text(
@@ -84,6 +93,7 @@ class SplashScreenPage extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 100),
             ],
           ),
         ],

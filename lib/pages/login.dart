@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            backgroundColor: alertColor,
+            backgroundColor: primaryColor,
             content: const Text(
               'Email atau Password yang dimasukkan salah!',
               textAlign: TextAlign.center,
@@ -261,20 +261,22 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: Stack(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  'assets/img/asset_bg.png',
-                  height: 215,
-                ),
-                const SizedBox(height: 90),
-                Image.asset(
-                  'assets/img/asset_bg2.png',
-                  width: double.infinity,
-                ),
-              ],
+            SizedBox(
+              height: MediaQuery.of(context).size.height - 150,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    'assets/img/asset_bg.png',
+                    height: 215,
+                  ),
+                  Image.asset(
+                    'assets/img/asset_bg2.png',
+                    width: double.infinity,
+                  ),
+                ],
+              ),
             ),
             Column(
               children: [
@@ -306,20 +308,17 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: primaryColor,
-        body: ListView(
-          children: [
-            Stack(
-              children: [
-                body(),
-                logo(),
-              ],
-            ),
-          ],
-        ),
+    return Scaffold(
+      backgroundColor: primaryColor,
+      body: ListView(
+        children: [
+          Stack(
+            children: [
+              body(),
+              logo(),
+            ],
+          ),
+        ],
       ),
     );
   }

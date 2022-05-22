@@ -1,5 +1,8 @@
+import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/theme.dart';
+import 'package:bengkel_online/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -10,10 +13,48 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool showPassword = true;
-  bool showConfirmPassword = true;
+  bool isLoading = false;
+
+  TextEditingController nameController = TextEditingController(text: '');
+  TextEditingController phoneController = TextEditingController(text: '');
+  TextEditingController emailController = TextEditingController(text: '');
+  TextEditingController pinController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    handleSignUp() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (await authProvider.register(
+        fullname: nameController.text,
+        phoneNumber: phoneController.text,
+        email: emailController.text,
+        pin: pinController.text,
+        password: passwordController.text,
+      )) {
+        Navigator.pushNamed(context, 'home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: primaryColor,
+            content: const Text(
+              'Gagal Registrasi!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     Widget logo() {
       return Center(
         child: Container(
@@ -40,7 +81,13 @@ class _RegisterPageState extends State<RegisterPage> {
       );
     }
 
-    Widget nameInput() {
+    Widget formInput(
+      IconData urlIcon,
+      String placeholder,
+      TextEditingController controller,
+      bool obsureText,
+      TextInputType keyboardType,
+    ) {
       return Container(
         height: 50,
         margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
@@ -61,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Row(
           children: [
             Icon(
-              Icons.person,
+              urlIcon,
               color: iconColor,
             ),
             const SizedBox(
@@ -69,259 +116,31 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             Expanded(
               child: TextFormField(
-                autofocus: true,
-                keyboardType: TextInputType.name,
+                keyboardType: keyboardType,
+                obscureText: obsureText,
+                controller: controller,
                 style: poppinsTextStyle,
-                decoration: InputDecoration.collapsed(
-                  hintText: 'Nama Lengkap',
-                  hintStyle: placeholderTextStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget phoneInput() {
-      return Container(
-        height: 50,
-        margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.call,
-              color: iconColor,
-            ),
-            const SizedBox(
-              width: 18,
-            ),
-            Expanded(
-              child: TextFormField(
-                autofocus: true,
-                keyboardType: TextInputType.number,
-                style: poppinsTextStyle,
-                decoration: InputDecoration.collapsed(
-                  hintText: 'No. Handphone',
-                  hintStyle: placeholderTextStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget emailInput() {
-      return Container(
-        height: 50,
-        margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.mail,
-              color: iconColor,
-            ),
-            const SizedBox(
-              width: 18,
-            ),
-            Expanded(
-              child: TextFormField(
-                autofocus: true,
-                keyboardType: TextInputType.emailAddress,
-                style: poppinsTextStyle,
-                decoration: InputDecoration.collapsed(
-                  hintText: 'Email',
-                  hintStyle: placeholderTextStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget pinInput() {
-      return Container(
-        height: 50,
-        margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.confirmation_number,
-              color: iconColor,
-            ),
-            const SizedBox(
-              width: 18,
-            ),
-            Expanded(
-              child: TextFormField(
-                autofocus: true,
-                keyboardType: TextInputType.number,
-                style: poppinsTextStyle,
-                decoration: InputDecoration.collapsed(
-                  hintText: 'Buat PIN',
-                  hintStyle: placeholderTextStyle,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget passwordInput() {
-      return Container(
-        height: 50,
-        margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.lock_outline,
-              color: iconColor,
-            ),
-            const SizedBox(
-              width: 18,
-            ),
-            Expanded(
-              child: TextFormField(
-                style: poppinsTextStyle,
-                obscureText: showPassword,
                 decoration: InputDecoration(
-                  suffixIcon: Builder(
-                    builder: (context) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            showPassword = !showPassword;
-                          });
-                        },
-                        child: Icon(
-                          showPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: iconColor,
-                        ),
-                      );
-                    },
-                  ),
-                  hintText: 'Password',
-                  hintStyle: placeholderTextStyle,
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget confirmPasswordInput() {
-      return Container(
-        height: 50,
-        margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.lock_outline,
-              color: iconColor,
-            ),
-            const SizedBox(
-              width: 18,
-            ),
-            Expanded(
-              child: TextFormField(
-                style: poppinsTextStyle,
-                obscureText: showConfirmPassword,
-                decoration: InputDecoration(
-                  suffixIcon: Builder(
-                    builder: (context) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            showConfirmPassword = !showConfirmPassword;
-                          });
-                        },
-                        child: Icon(
-                          showConfirmPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: iconColor,
-                        ),
-                      );
-                    },
-                  ),
-                  hintText: 'Konfirmasi Password',
+                  suffixIcon: urlIcon == Icons.lock_outline
+                      ? Builder(
+                          builder: (context) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  showPassword = !showPassword;
+                                });
+                              },
+                              child: Icon(
+                                showPassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: iconColor,
+                              ),
+                            );
+                          },
+                        )
+                      : null,
+                  hintText: placeholder,
                   hintStyle: placeholderTextStyle,
                   border: InputBorder.none,
                 ),
@@ -359,9 +178,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         margin: const EdgeInsets.only(top: 16),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, 'login');
-          },
+          onPressed: handleSignUp,
           child: Text(
             'Daftar',
             style: poppinsTextStyle.copyWith(
@@ -415,37 +232,42 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         child: Stack(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  'assets/img/asset_bg.png',
-                  height: 215,
-                ),
-                const SizedBox(height: 400),
-                Image.asset(
-                  'assets/img/asset_bg2.png',
-                  width: double.infinity,
-                ),
-              ],
+            SizedBox(
+              height: MediaQuery.of(context).size.height - 150,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    'assets/img/asset_bg.png',
+                    height: 215,
+                  ),
+                  Image.asset(
+                    'assets/img/asset_bg2.png',
+                    width: double.infinity,
+                  ),
+                ],
+              ),
             ),
             Column(
               children: [
                 const SizedBox(height: 150),
-                nameInput(),
+                formInput(Icons.person, 'Nama Lengkap', nameController, false,
+                    TextInputType.name),
                 const SizedBox(height: 30),
-                phoneInput(),
+                formInput(Icons.phone, 'No. Handphone', phoneController, false,
+                    TextInputType.phone),
                 const SizedBox(height: 30),
-                emailInput(),
+                formInput(Icons.email, 'Email', emailController, false,
+                    TextInputType.emailAddress),
                 const SizedBox(height: 30),
-                pinInput(),
+                formInput(Icons.confirmation_number, 'Nomor Pin (6 digit)',
+                    pinController, false, TextInputType.number),
                 const SizedBox(height: 30),
-                passwordInput(),
-                const SizedBox(height: 30),
-                confirmPasswordInput(),
+                formInput(Icons.lock_outline, 'Password', passwordController,
+                    showPassword, TextInputType.text),
                 const SizedBox(height: 62),
-                buttonRegistrasi(),
+                isLoading ? const LoadingButton() : buttonRegistrasi(),
                 const SizedBox(height: 30),
                 buttonLogin(),
               ],
@@ -455,20 +277,17 @@ class _RegisterPageState extends State<RegisterPage> {
       );
     }
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: primaryColor,
-        body: ListView(
-          children: [
-            Stack(
-              children: [
-                body(),
-                logo(),
-              ],
-            ),
-          ],
-        ),
+    return Scaffold(
+      backgroundColor: primaryColor,
+      body: ListView(
+        children: [
+          Stack(
+            children: [
+              body(),
+              logo(),
+            ],
+          ),
+        ],
       ),
     );
   }
