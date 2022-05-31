@@ -53,4 +53,61 @@ class AuthProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> update({
+    required String token,
+    required String fullname,
+    required String phoneNumber,
+    required String pinNumber,
+  }) async {
+    try {
+      UserModel user = await AuthService().update(
+        token: token,
+        fullname: fullname,
+        phoneNumber: phoneNumber,
+        pinNumber: pinNumber,
+      );
+
+      _user = user;
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updatePassword({
+    required String token,
+    required String password,
+  }) async {
+    try {
+      UserModel user = await AuthService().updatePassword(
+        token: token,
+        password: password,
+      );
+
+      _user = user;
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> logout(
+    String token,
+  ) async {
+    try {
+      if (await AuthService().logout(
+        token: token,
+      )) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

@@ -1,10 +1,13 @@
-import 'package:bengkel_online/pages/home/call_mechanic_page.dart';
 import 'package:bengkel_online/pages/home/cart_page.dart';
 import 'package:bengkel_online/pages/home/home_page.dart';
 import 'package:bengkel_online/pages/home/profile_page.dart';
 import 'package:bengkel_online/pages/home/transactions_page.dart';
-import 'package:bengkel_online/theme.dart';
+import 'package:bengkel_online/providers/auth_provider.dart';
+import 'package:bengkel_online/providers/vehicle_provider.dart';
+import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/widgets/loading_wdiget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -15,9 +18,33 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    VehicleProvider vehicleProvider =
+        Provider.of<VehicleProvider>(context, listen: false);
+
+    handleCallMechanic() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (vehicleProvider.vehicles.isEmpty) {
+        await vehicleProvider.getVehicles(
+          authProvider.user.token.toString(),
+        );
+        Navigator.pushNamed(context, 'vehicle');
+      } else {
+        Navigator.pushNamed(context, 'vehicle');
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     Widget customBottomNav() {
       return Container(
         margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -52,14 +79,17 @@ class _MainPageState extends State<MainPage> {
                   label: '',
                 ),
                 BottomNavigationBarItem(
-                  icon: Container(
-                    margin: const EdgeInsets.only(
-                      top: 15,
-                    ),
-                    child: Icon(
-                      Icons.call,
-                      size: 30,
-                      color: currentIndex == 1 ? greyColor : whiteColor,
+                  icon: GestureDetector(
+                    onTap: handleCallMechanic,
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: 15,
+                      ),
+                      child: Icon(
+                        Icons.call,
+                        size: 30,
+                        color: currentIndex == 1 ? greyColor : whiteColor,
+                      ),
                     ),
                   ),
                   label: '',
@@ -114,8 +144,6 @@ class _MainPageState extends State<MainPage> {
       switch (currentIndex) {
         case 0:
           return const HomePage();
-        case 1:
-          return const CallMechanicPage();
         case 2:
           return const CartPage();
         case 3:
@@ -128,7 +156,7 @@ class _MainPageState extends State<MainPage> {
     }
 
     return Scaffold(
-      body: body(),
+      body: isLoading ? const LoadingWidget('Mohon Ditunggu') : body(),
       bottomNavigationBar: customBottomNav(),
     );
   }

@@ -1,5 +1,8 @@
-import 'package:bengkel_online/theme.dart';
+import 'package:bengkel_online/providers/auth_provider.dart';
+import 'package:bengkel_online/providers/vehicle_provider.dart';
+import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddVehicle extends StatefulWidget {
   const AddVehicle({Key? key}) : super(key: key);
@@ -9,11 +12,61 @@ class AddVehicle extends StatefulWidget {
 }
 
 class _AddVehicleState extends State<AddVehicle> {
-  TextEditingController vehicleNameController = TextEditingController(text: '');
-  TextEditingController numberPlateController = TextEditingController(text: '');
-
   @override
   Widget build(BuildContext context) {
+    VehicleProvider vehicleProvider = Provider.of<VehicleProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    TextEditingController vehicleNameController =
+        TextEditingController(text: '');
+    TextEditingController numberPlateController =
+        TextEditingController(text: '');
+
+    handleCreateVehicle() async {
+      if (vehicleNameController.text == '' ||
+          numberPlateController.text == '') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: primaryColor,
+            content: const Text(
+              'Silahkan lengkapi inputan diatas!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      } else if (await vehicleProvider.createVehicle(
+        authProvider.user.token!,
+        vehicleNameController.text,
+        numberPlateController.text,
+        'https://elitebba.com/wp-content/uploads/2017/04/default-image.jpg',
+      )) {
+        await Provider.of<VehicleProvider>(context, listen: false).getVehicles(
+          authProvider.user.token.toString(),
+        );
+        Navigator.pushReplacementNamed(context, 'vehicle');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+              'Berhasil ditambahkan.',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: primaryColor,
+            content: const Text(
+              'Gagal menambahkan kendaraan baru!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+    }
+
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
@@ -21,7 +74,7 @@ class _AddVehicleState extends State<AddVehicle> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, 'vehicle');
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -29,7 +82,7 @@ class _AddVehicleState extends State<AddVehicle> {
           ),
         ),
         title: Text(
-          'Data Kendaraan',
+          'Buat Kendaraan Baru',
           style: whiteTextStyle.copyWith(
             fontWeight: medium,
             fontSize: 18,
@@ -100,7 +153,9 @@ class _AddVehicleState extends State<AddVehicle> {
             const SizedBox(height: 20),
             formInput('Nomor Plat', numberPlateController, TextInputType.text),
             const SizedBox(height: 40),
-            Image.asset('assets/img/img_default.png'),
+            ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset('assets/img/img_default.png')),
             const SizedBox(height: 40),
 
             // BUTOON
@@ -130,7 +185,7 @@ class _AddVehicleState extends State<AddVehicle> {
               ),
               margin: const EdgeInsets.only(top: 16),
               child: TextButton(
-                onPressed: () {},
+                onPressed: handleCreateVehicle,
                 child: Text(
                   'Tambahkan',
                   style: poppinsTextStyle.copyWith(

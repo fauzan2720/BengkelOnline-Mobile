@@ -1,28 +1,32 @@
+import 'package:bengkel_online/models/vehicle_model.dart';
 import 'package:bengkel_online/providers/auth_provider.dart';
-import 'package:bengkel_online/providers/location_provider.dart';
+import 'package:bengkel_online/providers/vehicle_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddLocation extends StatefulWidget {
-  const AddLocation({Key? key}) : super(key: key);
+class EditVehicle extends StatefulWidget {
+  const EditVehicle(this.vehicle, {Key? key}) : super(key: key);
+  final VehicleModel vehicle;
 
   @override
-  State<AddLocation> createState() => _AddLocationState();
+  State<EditVehicle> createState() => _EditVehicleState();
 }
 
-class _AddLocationState extends State<AddLocation> {
+class _EditVehicleState extends State<EditVehicle> {
   @override
   Widget build(BuildContext context) {
-    LocationProvider locationProvider = Provider.of<LocationProvider>(context);
+    VehicleProvider vehicleProvider = Provider.of<VehicleProvider>(context);
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
-    TextEditingController alamatController = TextEditingController(text: '');
-    TextEditingController detailLokasiController =
-        TextEditingController(text: '');
+    TextEditingController vehicleNameController =
+        TextEditingController(text: widget.vehicle.vehicleName);
+    TextEditingController numberPlateController =
+        TextEditingController(text: widget.vehicle.numberPlate);
 
-    handleCreateLocation() async {
-      if (alamatController.text == '' || detailLokasiController.text == '') {
+    handleCreateVehicle() async {
+      if (vehicleNameController.text == '' ||
+          numberPlateController.text == '') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: primaryColor,
@@ -32,22 +36,23 @@ class _AddLocationState extends State<AddLocation> {
             ),
           ),
         );
-      } else if (await locationProvider.createLocation(
+      } else if (await vehicleProvider.updateVehicle(
         authProvider.user.token!,
-        alamatController.text,
-        detailLokasiController.text,
+        widget.vehicle.id.toString(),
+        vehicleNameController.text,
+        numberPlateController.text,
+        'https://www.kindpng.com/picc/m/189-1893945_transparent-important-update-hd-png-download.png',
       )) {
-        await Provider.of<LocationProvider>(context, listen: false)
-            .getLocations(
+        await Provider.of<VehicleProvider>(context, listen: false).getVehicles(
           authProvider.user.token.toString(),
         );
-        Navigator.pushReplacementNamed(context, 'location');
+        Navigator.pushReplacementNamed(context, 'vehicle');
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.green,
             content: Text(
-              'Berhasil ditambahkan.',
+              'Berhasil diperbarui.',
               textAlign: TextAlign.center,
             ),
           ),
@@ -57,7 +62,7 @@ class _AddLocationState extends State<AddLocation> {
           SnackBar(
             backgroundColor: primaryColor,
             content: const Text(
-              'Gagal menambahkan lokasi baru!',
+              'Gagal diperbarui!',
               textAlign: TextAlign.center,
             ),
           ),
@@ -72,7 +77,7 @@ class _AddLocationState extends State<AddLocation> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.pushReplacementNamed(context, 'location');
+            Navigator.pushReplacementNamed(context, 'vehicle');
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -80,7 +85,7 @@ class _AddLocationState extends State<AddLocation> {
           ),
         ),
         title: Text(
-          'Buat Alamat Rumah Baru',
+          'Perbarui Kendaraan',
           style: whiteTextStyle.copyWith(
             fontWeight: medium,
             fontSize: 18,
@@ -146,10 +151,14 @@ class _AddLocationState extends State<AddLocation> {
         child: ListView(
           children: [
             const SizedBox(height: 30),
-            formInput('Alamat', alamatController, TextInputType.text),
-            const SizedBox(height: 20),
             formInput(
-                'Detail Lokasi', detailLokasiController, TextInputType.text),
+                'Nama Kendaraan', vehicleNameController, TextInputType.text),
+            const SizedBox(height: 20),
+            formInput('Nomor Plat', numberPlateController, TextInputType.text),
+            const SizedBox(height: 40),
+            ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset('assets/img/img_default.png')),
             const SizedBox(height: 40),
 
             // BUTOON
@@ -179,9 +188,9 @@ class _AddLocationState extends State<AddLocation> {
               ),
               margin: const EdgeInsets.only(top: 16),
               child: TextButton(
-                onPressed: handleCreateLocation,
+                onPressed: handleCreateVehicle,
                 child: Text(
-                  'Tambahkan',
+                  'Perbarui',
                   style: poppinsTextStyle.copyWith(
                     fontWeight: bold,
                     color: Colors.white,

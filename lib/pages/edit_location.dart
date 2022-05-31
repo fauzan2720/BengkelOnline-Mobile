@@ -1,25 +1,28 @@
+import 'package:bengkel_online/models/location_model.dart';
 import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/providers/location_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddLocation extends StatefulWidget {
-  const AddLocation({Key? key}) : super(key: key);
+class EditLocation extends StatefulWidget {
+  const EditLocation(this.location, {Key? key}) : super(key: key);
+  final LocationModel location;
 
   @override
-  State<AddLocation> createState() => _AddLocationState();
+  State<EditLocation> createState() => _EditLocationState();
 }
 
-class _AddLocationState extends State<AddLocation> {
+class _EditLocationState extends State<EditLocation> {
   @override
   Widget build(BuildContext context) {
     LocationProvider locationProvider = Provider.of<LocationProvider>(context);
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
-    TextEditingController alamatController = TextEditingController(text: '');
+    TextEditingController alamatController =
+        TextEditingController(text: widget.location.address);
     TextEditingController detailLokasiController =
-        TextEditingController(text: '');
+        TextEditingController(text: widget.location.detailAddress);
 
     handleCreateLocation() async {
       if (alamatController.text == '' || detailLokasiController.text == '') {
@@ -32,8 +35,9 @@ class _AddLocationState extends State<AddLocation> {
             ),
           ),
         );
-      } else if (await locationProvider.createLocation(
+      } else if (await locationProvider.updateLocation(
         authProvider.user.token!,
+        widget.location.id.toString(),
         alamatController.text,
         detailLokasiController.text,
       )) {
@@ -47,7 +51,7 @@ class _AddLocationState extends State<AddLocation> {
           const SnackBar(
             backgroundColor: Colors.green,
             content: Text(
-              'Berhasil ditambahkan.',
+              'Berhasil diperbarui.',
               textAlign: TextAlign.center,
             ),
           ),
@@ -57,7 +61,7 @@ class _AddLocationState extends State<AddLocation> {
           SnackBar(
             backgroundColor: primaryColor,
             content: const Text(
-              'Gagal menambahkan lokasi baru!',
+              'Gagal diperbarui!',
               textAlign: TextAlign.center,
             ),
           ),
@@ -80,7 +84,7 @@ class _AddLocationState extends State<AddLocation> {
           ),
         ),
         title: Text(
-          'Buat Alamat Rumah Baru',
+          'Perbarui Alamat Rumah',
           style: whiteTextStyle.copyWith(
             fontWeight: medium,
             fontSize: 18,
@@ -181,7 +185,7 @@ class _AddLocationState extends State<AddLocation> {
               child: TextButton(
                 onPressed: handleCreateLocation,
                 child: Text(
-                  'Tambahkan',
+                  'Perbarui',
                   style: poppinsTextStyle.copyWith(
                     fontWeight: bold,
                     color: Colors.white,

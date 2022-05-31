@@ -1,12 +1,16 @@
-import 'package:bengkel_online/theme.dart';
+import 'package:bengkel_online/providers/location_provider.dart';
+import 'package:bengkel_online/util/themes.dart';
 import 'package:bengkel_online/widgets/location_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LocationPage extends StatelessWidget {
   const LocationPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    LocationProvider locationProvider = Provider.of<LocationProvider>(context);
+
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
@@ -22,7 +26,7 @@ class LocationPage extends StatelessWidget {
           ),
         ),
         title: Text(
-          'Data Lokasi Saya',
+          'Pilih Lokasi Sekarang',
           style: whiteTextStyle.copyWith(
             fontWeight: medium,
             fontSize: 18,
@@ -37,12 +41,13 @@ class LocationPage extends StatelessWidget {
       appBar: header(),
       body: ListView(
         children: [
-          const LocationTile(),
-          const LocationTile(),
-          const LocationTile(),
-          const LocationTile(),
-          const LocationTile(),
-          const LocationTile(),
+          Column(
+            children: locationProvider.locations
+                .map(
+                  (e) => LocationTile(e),
+                )
+                .toList(),
+          ),
           Container(
             margin: const EdgeInsets.symmetric(
               vertical: 20,
@@ -73,7 +78,7 @@ class LocationPage extends StatelessWidget {
             ),
             child: TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, 'add-location');
+                Navigator.pushReplacementNamed(context, 'add-location');
               },
               child: Text(
                 'Tambah Lokasi',

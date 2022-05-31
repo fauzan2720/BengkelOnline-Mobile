@@ -1,5 +1,5 @@
 import 'package:bengkel_online/models/product_model.dart';
-import 'package:bengkel_online/theme.dart';
+import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
@@ -32,7 +32,7 @@ class ProductCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
+                child: Image.network(
                   product.galleries![0].url.toString(),
                   width: 126,
                   height: 136,
@@ -48,7 +48,7 @@ class ProductCard extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                '${product.price}',
+                'Rp${product.price}',
                 style: redTextStyle.copyWith(
                   fontSize: 12,
                 ),

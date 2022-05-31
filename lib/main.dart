@@ -1,7 +1,9 @@
 import 'package:bengkel_online/pages/add_location.dart';
 import 'package:bengkel_online/pages/add_vehicle.dart';
-import 'package:bengkel_online/pages/call_mechanic.dart';
+import 'package:bengkel_online/pages/edit_password.dart';
+import 'package:bengkel_online/pages/result_call_mechanic.dart';
 import 'package:bengkel_online/pages/edit_profile.dart';
+import 'package:bengkel_online/pages/home/call_mechanic_page.dart';
 import 'package:bengkel_online/pages/home/main_page.dart';
 import 'package:bengkel_online/pages/location.dart';
 import 'package:bengkel_online/pages/login.dart';
@@ -10,7 +12,10 @@ import 'package:bengkel_online/pages/register.dart';
 import 'package:bengkel_online/pages/splash_screen.dart';
 import 'package:bengkel_online/pages/vehicles.dart';
 import 'package:bengkel_online/providers/auth_provider.dart';
+import 'package:bengkel_online/providers/call_mechanic_provider.dart';
+import 'package:bengkel_online/providers/location_provider.dart';
 import 'package:bengkel_online/providers/product_provider.dart';
+import 'package:bengkel_online/providers/vehicle_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +35,16 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProductProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => VehicleProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LocationProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CallMechanicProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -39,9 +53,11 @@ class MyApp extends StatelessWidget {
           'login': (context) => const LoginPage(),
           'registrasi': (context) => const RegisterPage(),
           'home': (context) => const MainPage(),
+          'call': (context) => const CallMechanicPage(),
           'call-mechanic': (context) => const CallMechanic(),
           'confirm': (context) => const PinConfirmation(),
           'edit-profile': (context) => const EditProfilePage(),
+          'edit-password': (context) => const EditPasswordPage(),
           'vehicle': (context) => const VehiclePage(),
           'add-vehicle': (context) => const AddVehicle(),
           'location': (context) => const LocationPage(),
@@ -50,8 +66,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-}
-
-class Palette {
-  static String baseUrl = 'http://127.0.0.1:8000/api';
 }

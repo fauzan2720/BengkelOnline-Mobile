@@ -1,5 +1,5 @@
 import 'package:bengkel_online/providers/product_provider.dart';
-import 'package:bengkel_online/theme.dart';
+import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +43,7 @@ class SplashScreenPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 48),
                 child: Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.',
+                  'Rasakan berbagai fitur yang memberi kemudahan layanan servis tanpa harus pergi ke Bengkel. Mekanik profesional dan Bengkel Resmi.',
                   overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
                   style: poppinsTextStyle.copyWith(
@@ -81,6 +81,8 @@ class SplashScreenPage extends StatelessWidget {
                   onPressed: () async {
                     await Provider.of<ProductProvider>(context, listen: false)
                         .getProducts();
+                    await Provider.of<ProductProvider>(context, listen: false)
+                        .getProductOils();
 
                     Navigator.pushNamed(context, 'login');
                   },

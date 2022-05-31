@@ -9,6 +9,7 @@ Color greyColor = const Color(0xff89898A);
 Color greenColor = const Color(0xff59C148);
 Color yellowColor = const Color(0xffE9B34A);
 Color blueColor = const Color(0xff637BAA);
+Color redColor = const Color(0xffEF1A1C);
 Color iconColor = const Color(0xff990303);
 Color transparentColor = Colors.transparent;
 
@@ -31,7 +32,7 @@ TextStyle lightTextStyle = GoogleFonts.poppins(
 );
 
 TextStyle redTextStyle = GoogleFonts.poppins(
-  color: const Color(0xffEF1A1C),
+  color: redColor,
 );
 
 TextStyle placeholderTextStyle = GoogleFonts.poppins(

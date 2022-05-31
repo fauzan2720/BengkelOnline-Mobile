@@ -4,61 +4,71 @@ import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
+class EditPasswordPage extends StatefulWidget {
+  const EditPasswordPage({Key? key}) : super(key: key);
 
   @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
+  State<EditPasswordPage> createState() => _EditPasswordPageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _EditPasswordPageState extends State<EditPasswordPage> {
+  bool showPassword = true;
+
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModel user = authProvider.user;
 
-    TextEditingController nameController =
-        TextEditingController(text: user.fullname);
-    TextEditingController phoneController =
-        TextEditingController(text: user.phoneNumber);
-    TextEditingController pinController =
-        TextEditingController(text: user.pinNumber.toString());
+    TextEditingController newPasswordController =
+        TextEditingController(text: '');
+    TextEditingController confirmNewPasswordController =
+        TextEditingController(text: '');
 
     handleUpdate() async {
-      if (nameController.text.isEmpty ||
-          phoneController.text.isEmpty ||
-          pinController.text.isEmpty) {
+      if (newPasswordController.text.isEmpty ||
+          confirmNewPasswordController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: primaryColor,
             content: const Text(
-              'Masih ada inputan yang kosong!',
+              'Masukkan password dengan benar!',
               textAlign: TextAlign.center,
             ),
           ),
         );
-      } else if (await authProvider.update(
-        token: user.token.toString(),
-        fullname: nameController.text,
-        phoneNumber: phoneController.text,
-        pinNumber: pinController.text,
-      )) {
-        Navigator.pushNamed(context, 'home');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: greenColor,
-            content: const Text(
-              'Profil berhasil diperbarui',
-              textAlign: TextAlign.center,
+      } else if (newPasswordController.text ==
+          confirmNewPasswordController.text) {
+        if (await authProvider.updatePassword(
+          token: user.token!,
+          password: newPasswordController.text,
+        )) {
+          Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: greenColor,
+              content: const Text(
+                'Password berhasil diperbarui',
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-        );
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: primaryColor,
+              content: const Text(
+                'Gagal Update Password!',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: primaryColor,
             content: const Text(
-              'Gagal Update Profil!',
+              'Password tidak sesuai!',
               textAlign: TextAlign.center,
             ),
           ),
@@ -81,7 +91,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
         ),
         title: Text(
-          'Perbarui Profile',
+          'Perbarui Password',
           style: whiteTextStyle.copyWith(
             fontWeight: medium,
             fontSize: 18,
@@ -139,8 +149,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 controller: controller,
                 style: poppinsTextStyle,
                 decoration: InputDecoration(
+                  hintText: placeholder,
                   hintStyle: placeholderTextStyle,
                   border: InputBorder.none,
+                  suffixIcon: urlIcon == Icons.lock_outline
+                      ? Builder(
+                          builder: (context) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  showPassword = !showPassword;
+                                });
+                              },
+                              child: Icon(
+                                showPassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: iconColor,
+                              ),
+                            );
+                          },
+                        )
+                      : null,
                 ),
               ),
             ),
@@ -157,29 +187,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 70),
-            Image.network(
-              'https://ui-avatars.com/api/?name=${user.fullname}&color=7F9CF5&background=EBF4FF&rounded=true&size=100',
-            ),
-            const SizedBox(height: 20),
             formInput(
-              Icons.person,
-              'Nama Lengkap',
-              nameController,
-              false,
-            ),
-            formInput(
-              Icons.phone,
-              'No. Handphone',
-              phoneController,
-              false,
-            ),
-            formInput(
-              Icons.confirmation_number,
-              'Nomor Pin (6 digit)',
-              pinController,
+              Icons.lock_outlined,
+              'Masukkan Password Baru',
+              newPasswordController,
               true,
             ),
-            const SizedBox(height: 30),
+            formInput(
+              Icons.lock_outlined,
+              'Konfirmasi Masukkan Password Baru',
+              confirmNewPasswordController,
+              true,
+            ),
           ],
         ),
       );

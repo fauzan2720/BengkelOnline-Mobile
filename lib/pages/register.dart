@@ -1,5 +1,5 @@
 import 'package:bengkel_online/providers/auth_provider.dart';
-import 'package:bengkel_online/theme.dart';
+import 'package:bengkel_online/util/themes.dart';
 import 'package:bengkel_online/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +30,21 @@ class _RegisterPageState extends State<RegisterPage> {
         isLoading = true;
       });
 
-      if (await authProvider.register(
+      if (nameController.text.isEmpty ||
+          phoneController.text.isEmpty ||
+          emailController.text.isEmpty ||
+          pinController.text.isEmpty ||
+          passwordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: primaryColor,
+            content: const Text(
+              'Masih ada inputan yang kosong!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      } else if (await authProvider.register(
         fullname: nameController.text,
         phoneNumber: phoneController.text,
         email: emailController.text,
@@ -38,12 +52,21 @@ class _RegisterPageState extends State<RegisterPage> {
         password: passwordController.text,
       )) {
         Navigator.pushNamed(context, 'home');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: greenColor,
+            content: const Text(
+              'Registrasi berhasil!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: primaryColor,
             content: const Text(
-              'Gagal Registrasi!',
+              'Nomor telepon atau email ada yang sudah terdaftar, silahkan ganti yang lain.',
               textAlign: TextAlign.center,
             ),
           ),

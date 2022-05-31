@@ -1,12 +1,21 @@
-import 'package:bengkel_online/theme.dart';
+import 'package:bengkel_online/providers/vehicle_provider.dart';
+import 'package:bengkel_online/util/themes.dart';
 import 'package:bengkel_online/widgets/vehicle_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class VehiclePage extends StatelessWidget {
+class VehiclePage extends StatefulWidget {
   const VehiclePage({Key? key}) : super(key: key);
 
   @override
+  State<VehiclePage> createState() => _VehiclePageState();
+}
+
+class _VehiclePageState extends State<VehiclePage> {
+  @override
   Widget build(BuildContext context) {
+    VehicleProvider vehicleProvider = Provider.of<VehicleProvider>(context);
+
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
@@ -37,12 +46,13 @@ class VehiclePage extends StatelessWidget {
       appBar: header(),
       body: ListView(
         children: [
-          const VehicleTile(),
-          const VehicleTile(),
-          const VehicleTile(),
-          const VehicleTile(),
-          const VehicleTile(),
-          const VehicleTile(),
+          Column(
+            children: vehicleProvider.vehicles
+                .map(
+                  (e) => VehicleTile(e),
+                )
+                .toList(),
+          ),
           Container(
             margin: const EdgeInsets.symmetric(
               vertical: 20,
@@ -73,7 +83,7 @@ class VehiclePage extends StatelessWidget {
             ),
             child: TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, 'add-vehicle');
+                Navigator.pushReplacementNamed(context, 'add-vehicle');
               },
               child: Text(
                 'Tambah Kendaraan',

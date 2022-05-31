@@ -3,7 +3,7 @@ class UserModel {
   String? fullname;
   String? email;
   String? phoneNumber;
-  int? pinNumber;
+  String? pinNumber;
   String? profilePhotoUrl;
   String? token;
 

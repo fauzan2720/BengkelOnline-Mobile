@@ -1,4 +1,4 @@
-import 'package:bengkel_online/theme.dart';
+import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
 
 class CallMechanic extends StatelessWidget {
@@ -6,23 +6,35 @@ class CallMechanic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // CallMechanicProvider callMechanicProvider =
+    //     Provider.of<CallMechanicProvider>(context);
+    // CallMechanicModel callMechanic = callMechanicProvider.callMechanics[0];
+
     return Scaffold(
       body: ListView(
         children: [
           Stack(
             children: [
-              Image.asset(
-                'assets/img/img_default.png',
-                width: double.infinity,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 30,
-                  horizontal: 20,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  // '${callMechanic.vehicle!.photoUrl}',
+                  'https://ui-avatars.com/api/?name=Nama+Mekanik&color=7F9CF5&background=EBF4FF&rounded=true&size=64',
+                  width: double.infinity,
                 ),
-                child: Image.asset(
-                  'assets/img/ic_back.png',
-                  width: 60,
+              ),
+              GestureDetector(
+                onTap: () => Navigator.pushNamedAndRemoveUntil(
+                    context, 'home', (route) => false),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 30,
+                    horizontal: 20,
+                  ),
+                  child: Image.asset(
+                    'assets/img/ic_back.png',
+                    width: 60,
+                  ),
                 ),
               ),
             ],
@@ -38,31 +50,24 @@ class CallMechanic extends StatelessWidget {
               color: whiteColor,
             ),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.network(
-                  'https://ui-avatars.com/api/?name=Fauzan&color=7F9CF5&background=EBF4FF&rounded=true&size=64',
+                  'https://ui-avatars.com/api/?name=Nama+Mekanik&color=7F9CF5&background=EBF4FF&rounded=true&size=64',
                 ),
                 const SizedBox(width: 20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Johnny Croissant',
+                      'Nama Mekanik',
                       style: blackTextStyle.copyWith(
                         fontWeight: semibold,
                         fontSize: 16,
                       ),
                     ),
                     Text(
-                      'P 354 JM',
-                      style: blackTextStyle.copyWith(
-                        fontWeight: medium,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Text(
-                      'Sampai dalam 5 min',
+                      // 'Status: ${callMechanic.status}',
+                      'text',
                       style: poppinsTextStyle.copyWith(
                         color: greenColor,
                         fontWeight: medium,
@@ -104,30 +109,83 @@ class CallMechanic extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 30),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              border: Border.all(),
+              border: Border.all(color: greyColor),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Part yang diganti:',
+                  'Detail Pesanan:',
                   style: blackTextStyle.copyWith(
                     fontWeight: medium,
                     fontSize: 16,
                   ),
                 ),
                 const SizedBox(height: 6),
-                Text(
-                  '1. Barang A',
-                  style: blackTextStyle,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '1. Jenis Servis',
+                      style: blackTextStyle,
+                    ),
+                    Text(
+                      '-',
+                      style: blackTextStyle,
+                    ),
+                  ],
                 ),
-                Text(
-                  '2. Barang B',
-                  style: blackTextStyle,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '2. Produk yang dipesan',
+                      style: blackTextStyle,
+                    ),
+                    Text(
+                      '-',
+                      style: blackTextStyle,
+                    ),
+                  ],
                 ),
-                Text(
-                  '3. Barang C',
-                  style: blackTextStyle,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '3. Masalah',
+                      style: blackTextStyle,
+                    ),
+                    Text(
+                      '-',
+                      style: blackTextStyle,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '4. Metode Pembayaran',
+                      style: blackTextStyle,
+                    ),
+                    Text(
+                      '-',
+                      style: blackTextStyle,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '5. Total Bayar',
+                      style: blackTextStyle,
+                    ),
+                    Text(
+                      '-',
+                      style: blackTextStyle,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -162,10 +220,10 @@ class CallMechanic extends StatelessWidget {
             ),
             child: TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, 'confirm');
+                // Navigator.pushNamed(context, 'confirm');
               },
               child: Text(
-                'Lanjut ke Pembayaran',
+                'Selesaikan Pesanan',
                 style: whiteTextStyle.copyWith(
                   fontWeight: semibold,
                   fontSize: 16,
@@ -188,7 +246,7 @@ class CallMechanic extends StatelessWidget {
             ),
             child: TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                // Navigator.pop(context);
               },
               child: Text(
                 'Batalkan',

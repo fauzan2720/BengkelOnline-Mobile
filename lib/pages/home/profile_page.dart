@@ -1,14 +1,63 @@
-import 'package:bengkel_online/theme.dart';
+import 'package:bengkel_online/models/user_model.dart';
+import 'package:bengkel_online/providers/auth_provider.dart';
+import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
+
+    handleLogout() async {
+      AlertDialog alertDialog = AlertDialog(
+        title: const Text('Warning!!'),
+        content: const Text('Apakah anda yakin ingin keluar?'),
+        actions: [
+          TextButton(
+            child: const Text('Batal'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+              child: const Text('Yakin'),
+              onPressed: () async {
+                Navigator.pop(context);
+
+                if (await authProvider.logout(user.token!)) {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, 'login', (route) => false);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: greenColor,
+                      content: const Text(
+                        'Berhasil Logout',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: primaryColor,
+                      content: const Text(
+                        'Gagal Logout',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                }
+              }),
+        ],
+      );
+      showDialog(context: context, builder: (context) => alertDialog);
+    }
+
     Widget header() {
       return AppBar(
-        backgroundColor: whiteColor,
+        backgroundColor: primaryColor,
         automaticallyImplyLeading: false,
         elevation: 0,
         flexibleSpace: SafeArea(
@@ -19,7 +68,7 @@ class ProfilePage extends StatelessWidget {
             child: Row(
               children: [
                 Image.network(
-                  'https://ui-avatars.com/api/?name=Fauzan&color=7F9CF5&background=EBF4FF&rounded=true&size=64',
+                  'https://ui-avatars.com/api/?name=${user.fullname}&color=7F9CF5&background=EBF4FF&rounded=true&size=64',
                 ),
                 const SizedBox(
                   width: 16,
@@ -29,29 +78,19 @@ class ProfilePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Hallo, Fauzan',
+                        'Hallo, ${user.fullname}',
                         style: whiteTextStyle.copyWith(
                           fontSize: 24,
                           fontWeight: semibold,
                         ),
                       ),
                       Text(
-                        '@fauzan',
-                        style: greyTextStyle.copyWith(
+                        '${user.email}',
+                        style: whiteTextStyle.copyWith(
                           fontSize: 16,
                         ),
                       ),
                     ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/sign-in', (route) => false);
-                  },
-                  child: Image.asset(
-                    'assets/button_exit.png',
-                    width: 20,
                   ),
                 ),
               ],
@@ -61,21 +100,30 @@ class ProfilePage extends StatelessWidget {
       );
     }
 
-    Widget menuItem(String text) {
-      return Container(
-        margin: const EdgeInsets.only(top: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              text,
-              style: greyTextStyle.copyWith(fontSize: 13),
-            ),
-            Icon(
-              Icons.chevron_right,
-              color: primaryColor,
-            ),
-          ],
+    Widget menuItem(
+      void Function()? onTap,
+      String text,
+      Color color,
+    ) {
+      return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: const EdgeInsets.only(top: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                text,
+                style: poppinsTextStyle.copyWith(
+                  color: color,
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                color: color,
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -93,49 +141,55 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 40),
               Text(
                 'Akun',
-                style: whiteTextStyle.copyWith(
+                style: blackTextStyle.copyWith(
                   fontSize: 16,
                   fontWeight: semibold,
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/edit-profile', (route) => false);
+              menuItem(
+                () {
+                  Navigator.pushReplacementNamed(context, 'edit-profile');
                 },
-                child: menuItem(
-                  'Edit Profile',
+                'Perbarui Profil',
+                blackColor,
+              ),
+              menuItem(
+                () {
+                  Navigator.pushReplacementNamed(context, 'edit-password');
+                },
+                'Ubah Kata Sandi',
+                blackColor,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Umum',
+                style: blackTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: semibold,
                 ),
               ),
-              // menuItem(
-              //   'Your Orders',
-              // ),
-              // menuItem(
-              //   'Help',
-              // ),
-              // SizedBox(
-              //   height: 30,
-              // ),
-              // Text(
-              //   'General',
-              //   style: whiteTextStyle.copyWith(
-              //     fontSize: 16,
-              //     fontWeight: semibold,
-              //   ),
-              // ),
-              // menuItem(
-              //   'Privacy & Policy',
-              // ),
-              // menuItem(
-              //   'Term of Service',
-              // ),
-              // menuItem(
-              //   'Rate App',
+              menuItem(
+                () {
+                  // Navigator.pushReplacementNamed(context, '');
+                },
+                'FAQ',
+                blackColor,
+              ),
+              menuItem(
+                () {
+                  // Navigator.pushReplacementNamed(context, '');
+                },
+                'Beri Penilaian Aplikasi',
+                blackColor,
+              ),
+              menuItem(
+                handleLogout,
+                'Keluar',
+                redColor,
+              ),
             ],
           ),
         ),

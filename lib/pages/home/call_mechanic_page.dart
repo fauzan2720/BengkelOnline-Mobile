@@ -1,5 +1,16 @@
-import 'package:bengkel_online/theme.dart';
+import 'package:bengkel_online/models/location_model.dart';
+import 'package:bengkel_online/models/product_model.dart';
+import 'package:bengkel_online/models/user_model.dart';
+import 'package:bengkel_online/models/vehicle_model.dart';
+import 'package:bengkel_online/providers/auth_provider.dart';
+import 'package:bengkel_online/providers/call_mechanic_provider.dart';
+import 'package:bengkel_online/providers/location_provider.dart';
+import 'package:bengkel_online/providers/product_provider.dart';
+import 'package:bengkel_online/providers/vehicle_provider.dart';
+import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/widgets/loading_wdiget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CallMechanicPage extends StatefulWidget {
   const CallMechanicPage({Key? key}) : super(key: key);
@@ -9,200 +20,236 @@ class CallMechanicPage extends StatefulWidget {
 }
 
 class _CallMechanicPageState extends State<CallMechanicPage> {
-  int? _typyOfWork = 1;
-  int? _oilChange = 0;
+  bool isLoading = false;
+  String _typeOfWork = 'Servis Ringan';
   String _selectedPayment = 'Tunai';
+  int productId = 0;
+  double priceService = 50000;
+  double priceOil = 0;
 
   @override
   Widget build(BuildContext context) {
-    Widget radioJenisKendaraan(
-      int value,
-      String text,
-    ) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Radio(
-              value: value,
-              groupValue: _typyOfWork,
-              onChanged: (value) {
-                setState(
-                  () {
-                    _typyOfWork = value as int?;
-                  },
-                );
-              }),
-          const SizedBox(width: 10),
-          Text(
-            text,
-            style: blackTextStyle,
-          ),
-        ],
+    double totalPrice = (priceService + priceOil);
+
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    VehicleProvider vehicleProvider = Provider.of<VehicleProvider>(context);
+    LocationProvider locationProvider = Provider.of<LocationProvider>(context);
+    CallMechanicProvider callMechanicProvider =
+        Provider.of<CallMechanicProvider>(context);
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
+
+    UserModel user = authProvider.user;
+    VehicleModel vehicle = vehicleProvider.vehicles[0];
+    LocationModel location = locationProvider.locations[0];
+
+    TextEditingController problemController = TextEditingController(text: '');
+
+    handleShowVehicle() async {
+      await Provider.of<VehicleProvider>(context, listen: false).getVehicles(
+        authProvider.user.token.toString(),
       );
+      Navigator.pushNamed(context, 'vehicle');
     }
 
-    Widget radioGantiOli(
-      int value,
-      String text,
-    ) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Radio(
-              value: value,
-              groupValue: _oilChange,
-              onChanged: (value) {
-                setState(
-                  () {
-                    _oilChange = value as int?;
-                  },
-                );
-              }),
-          const SizedBox(width: 10),
-          Text(
-            text,
-            style: blackTextStyle,
-          ),
-        ],
+    handleShowLocation() async {
+      await Provider.of<LocationProvider>(context, listen: false).getLocations(
+        authProvider.user.token.toString(),
       );
+      Navigator.pushNamed(context, 'location');
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        color: bgLightColor,
-      ),
-      padding: const EdgeInsets.all(30),
-      child: ListView(
-        children: [
-          // HEADER
-          Text(
-            'Panggil Mekanik',
-            style: blackTextStyle.copyWith(
-              fontSize: 24,
-              fontWeight: bold,
+    handleCallMechanic() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      // jika inputan 'keluhan' kosong
+      if (problemController.text == '') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: primaryColor,
+            content: const Text(
+              'Form keluhan wajib diisi!',
+              textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 40),
+        );
+      } else if (productId == 0) {
+        // jika user tidak ganti oli
+        if (await callMechanicProvider.callMechanic(
+          user.token.toString(),
+          vehicle.id.toString(),
+          location.id.toString(),
+          _typeOfWork,
+          problemController.text,
+          _selectedPayment,
+          totalPrice,
+        )) {
+          // await Provider.of<CallMechanicProvider>(context, listen: false)
+          //     .getCallMechanic(
+          //   authProvider.user.token.toString(),
+          // );
 
-          // DATA KENDARAAN
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 30,
-              horizontal: 20,
+          Future.delayed(
+            const Duration(seconds: 1),
+            () => Navigator.pushReplacementNamed(context, 'call-mechanic'),
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.green,
+              content: Text(
+                'Mekanik ditemukan.',
+                textAlign: TextAlign.center,
+              ),
             ),
-            decoration: BoxDecoration(
-              color: whiteColor,
-              borderRadius: BorderRadius.circular(5),
+          );
+        }
+      } else if (await callMechanicProvider.callMechanicWithProduct(
+        // jika user ganti oli
+        user.token.toString(),
+        vehicle.id.toString(),
+        location.id.toString(),
+        productId.toString(),
+        _typeOfWork,
+        problemController.text,
+        _selectedPayment,
+        totalPrice,
+      )) {
+        // await Provider.of<CallMechanicProvider>(context, listen: false)
+        //     .getCallMechanic(
+        //   authProvider.user.token.toString(),
+        // );
+
+        Future.delayed(
+          const Duration(seconds: 1),
+          () => Navigator.pushReplacementNamed(context, 'call-mechanic'),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+              'Mekanik ditemukan.',
+              textAlign: TextAlign.center,
             ),
-            child: Row(
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: primaryColor,
+            content: const Text(
+              'Gagal Memanggil Mekanik!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
+    Widget showProductOils(
+      ProductModel product,
+    ) {
+      return GestureDetector(
+        onTap: () {
+          setState(() {
+            productId = product.id!;
+            priceOil = product.price!;
+            print('$productId - $priceOil');
+          });
+        },
+        child: Container(
+          width: 150,
+          height: 223,
+          margin: const EdgeInsets.only(right: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: productId == product.id
+                ? Border.all(color: blueColor)
+                : Border.all(color: transparentColor),
+            color: whiteColor,
+          ),
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Data Kendaraan',
-                      style: blackTextStyle.copyWith(
-                        fontWeight: semibold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-                    Text(
-                      'Vario 125',
-                      style: blackTextStyle.copyWith(
-                        fontWeight: medium,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'P 1234 JM',
-                      style: blackTextStyle.copyWith(
-                        fontWeight: medium,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    product.galleries![0].url.toString(),
+                    width: 126,
+                    height: 136,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.asset(
-                      'assets/img/img_default.png',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.fill,
-                    ),
-
-                    // BUTTON
-                    Container(
-                      width: 100,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Color(0xffF30F0F),
-                            Color(0xffD3717C),
-                          ],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            spreadRadius: 0,
-                            blurRadius: 4,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      margin: const EdgeInsets.only(top: 16),
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, 'vehicle');
-                        },
-                        child: Text(
-                          'Edit',
-                          style: poppinsTextStyle.copyWith(
-                            fontWeight: bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                const SizedBox(height: 12),
+                Text(
+                  '${product.productName}',
+                  style: poppinsTextStyle.copyWith(
+                    color: productId == product.id ? blueColor : blackColor,
+                    fontWeight: medium,
+                  ),
                 ),
+                const SizedBox(height: 6),
+                Text(
+                  'Rp${product.price}',
+                  style: poppinsTextStyle.copyWith(
+                    color: redColor,
+                    fontSize: 12,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                const SizedBox(height: 10),
               ],
             ),
           ),
-          const SizedBox(height: 30),
+        ),
+      );
+    }
 
-          // LOKASI SAYA
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 30,
-              horizontal: 20,
+    Widget content() {
+      return Container(
+        padding: const EdgeInsets.all(30),
+        child: ListView(
+          children: [
+            // HEADER
+            Center(
+              child: Text(
+                'Panggil Mekanik',
+                style: blackTextStyle.copyWith(
+                  fontSize: 24,
+                  fontWeight: bold,
+                ),
+              ),
             ),
-            decoration: BoxDecoration(
-              color: whiteColor,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: Column(
+            const SizedBox(height: 40),
+
+            // DATA KENDARAAN
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 30,
+                horizontal: 20,
+              ),
+              decoration: BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Lokasi Saya',
+                        'Data Kendaraan',
                         style: blackTextStyle.copyWith(
                           fontWeight: semibold,
                           fontSize: 16,
@@ -210,7 +257,7 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
                       ),
                       const SizedBox(height: 14),
                       Text(
-                        'Nama: Fauzan Abdillah',
+                        vehicle.vehicleName.toString(),
                         style: blackTextStyle.copyWith(
                           fontWeight: medium,
                           fontSize: 12,
@@ -218,15 +265,7 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Alamat: Jl. Imam Sukari',
-                        style: blackTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Detail Lokasi: Warung Makan Nikmat',
+                        vehicle.numberPlate.toString(),
                         style: blackTextStyle.copyWith(
                           fontWeight: medium,
                           fontSize: 12,
@@ -234,173 +273,348 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
                       ),
                     ],
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'location');
-                    },
-                    child: Text(
-                      'Ganti Alamat',
-                      style: blackTextStyle.copyWith(
-                        fontWeight: semibold,
-                        fontSize: 14,
-                        color: const Color(0xffCA4646),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          vehicle.photoUrl.toString(),
+                          width: 100,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+
+                      // BUTTON
+                      Container(
+                        width: 100,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0xffF30F0F),
+                              Color(0xffD3717C),
+                            ],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              spreadRadius: 0,
+                              blurRadius: 4,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        margin: const EdgeInsets.only(top: 16),
+                        child: TextButton(
+                          onPressed: handleShowVehicle,
+                          child: Text(
+                            'Edit',
+                            style: poppinsTextStyle.copyWith(
+                              fontWeight: bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 30),
+
+            // LOKASI SAYA
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 30,
+                horizontal: 20,
+              ),
+              decoration: BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Lokasi Saya',
+                          style: blackTextStyle.copyWith(
+                            fontWeight: semibold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        Text(
+                          'Nama: ${authProvider.user.fullname}',
+                          style: blackTextStyle.copyWith(
+                            fontWeight: medium,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Alamat: ${location.address}',
+                          style: blackTextStyle.copyWith(
+                            fontWeight: medium,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Detail Lokasi: ${location.detailAddress}',
+                          style: blackTextStyle.copyWith(
+                            fontWeight: medium,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: TextButton(
+                      onPressed: handleShowLocation,
+                      child: Text(
+                        'Ganti Alamat',
+                        style: blackTextStyle.copyWith(
+                          fontWeight: semibold,
+                          fontSize: 14,
+                          color: const Color(0xffCA4646),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 30),
-
-          // RADIO BUTTON
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // DETAIL LOKASI SAYA
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Jenis Pekerjaan',
-                    style: blackTextStyle.copyWith(
-                      fontSize: 16,
-                      fontWeight: bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  radioGantiOli(0, 'None'),
-                  radioGantiOli(1, 'Servis Ringan'),
-                  radioGantiOli(2, 'Servis Komplit'),
-                  radioGantiOli(3, 'Ganti Accu'),
-                  radioGantiOli(4, 'Ganti Oli Gardan'),
-                  radioGantiOli(5, 'Air Radiator'),
-                  radioGantiOli(6, 'Busi'),
                 ],
               ),
-
-              // GANTI OLI (OPSIONAL)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Ganti Oli (Opsional)',
-                    style: blackTextStyle.copyWith(
-                      fontSize: 16,
-                      fontWeight: bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  radioJenisKendaraan(1, 'None'),
-                  radioJenisKendaraan(2, 'MPX2'),
-                  radioJenisKendaraan(3, 'MPX1 0.8L'),
-                  radioJenisKendaraan(4, 'MPX1 1L'),
-                  radioJenisKendaraan(5, 'MPX1 1.2L'),
-                  radioJenisKendaraan(6, 'MPX3'),
-                  radioJenisKendaraan(7, 'SPX2'),
-                  radioJenisKendaraan(8, 'SPX1 0.8L'),
-                  radioJenisKendaraan(9, 'SPX1 1L'),
-                  radioJenisKendaraan(10, 'SPX1 1.2L'),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 30),
-
-          // KELUHAN
-          Text(
-            'Keluhan',
-            style: blackTextStyle.copyWith(
-              fontSize: 16,
-              fontWeight: bold,
             ),
-          ),
-          const SizedBox(height: 10),
-          TextFormField(
-            decoration: InputDecoration(
-              helperMaxLines: 10,
-              hintText: "Apa keluhan anda?",
-              border: OutlineInputBorder(
+            const SizedBox(height: 30),
+
+            // JENIS PEKERJAAN
+            Text(
+              'Jenis Pekerjaan',
+              style: blackTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: bgLightColor,
+                border: Border.all(color: greyColor),
                 borderRadius: BorderRadius.circular(5),
               ),
-            ),
-          ),
-          const SizedBox(height: 30),
+              child: DropdownButton<String>(
+                value: _typeOfWork,
+                items: <String>['Servis Ringan', 'Servis Komplit']
+                    .map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _typeOfWork = value!;
 
-          // METODE PEMBAYARAN
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: whiteColor,
-              border: Border.all(),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: DropdownButton<String>(
-              value: _selectedPayment,
-              items: <String>['Tunai', 'Indomart', 'Alfamart', 'GoPay', 'OVO']
-                  .map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedPayment = value!;
-                });
-              },
-            ),
-          ),
-          const SizedBox(height: 40),
+                    if (_typeOfWork == 'Servis Ringan') {
+                      priceService = 50000;
+                    } else if (_typeOfWork == 'Servis Komplit') {
+                      priceService = 100000;
+                    }
 
-          // BUTTON
-          Container(
-            width: double.infinity,
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
+                    print('value type of work: $_typeOfWork');
+                    print('value price service: $priceService');
+                  });
+                },
               ),
-              gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xffF30F0F),
-                  Color(0xffD3717C),
+            ),
+            const SizedBox(height: 40),
+
+            // GANTI OLI (OPSIONAL)
+            Text(
+              'Ganti Oli (Opsional)',
+              style: blackTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: productProvider.productoils
+                    .map(
+                      (e) => showProductOils(e),
+                    )
+                    .toList(),
+              ),
+            ),
+            const SizedBox(height: 30),
+
+            // KELUHAN
+            Text(
+              'Keluhan',
+              style: blackTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: problemController,
+              decoration: InputDecoration(
+                helperMaxLines: 10,
+                hintText: "Apa keluhan anda?",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
+
+            // METODE PEMBAYARAN
+            Text(
+              'Metode Pembayaran',
+              style: blackTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: bgLightColor,
+                border: Border.all(color: greyColor),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: DropdownButton<String>(
+                value: _selectedPayment,
+                items: <String>['Tunai', 'Indomart', 'Alfamart', 'GoPay', 'OVO']
+                    .map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedPayment = value!;
+                    print('value payment gateway: $_selectedPayment');
+                  });
+                },
+              ),
+            ),
+            const SizedBox(height: 40),
+
+            // TOTAL PRICE
+            Text(
+              'Total Bayar: Rp$totalPrice',
+              style: redTextStyle.copyWith(
+                fontWeight: medium,
+              ),
+              textAlign: TextAlign.right,
+            ),
+
+            // BUTTONS
+            Container(
+              width: double.infinity,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(10),
+                ),
+                gradient: const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xffF30F0F),
+                    Color(0xffD3717C),
+                  ],
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.25),
+                    spreadRadius: 0,
+                    blurRadius: 4,
+                    offset: const Offset(0, 4),
+                  ),
                 ],
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.25),
-                  spreadRadius: 0,
-                  blurRadius: 4,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            margin: const EdgeInsets.only(top: 16),
-            child: TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, 'call-mechanic');
-              },
-              child: Text(
-                'Panggil Sekarang',
-                style: whiteTextStyle.copyWith(
-                  fontWeight: semibold,
-                  fontSize: 16,
+              margin: const EdgeInsets.only(top: 10),
+              child: TextButton(
+                onPressed: handleCallMechanic,
+                child: Text(
+                  'Panggil Sekarang',
+                  style: whiteTextStyle.copyWith(
+                    fontWeight: semibold,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
+            Container(
+              width: double.infinity,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(10),
+                ),
+                border: Border.all(color: primaryColor, width: 1),
+                color: bgLightColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.25),
+                    spreadRadius: 0,
+                    blurRadius: 4,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              margin: const EdgeInsets.only(top: 16),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, 'home', (route) => false);
+                },
+                child: Text(
+                  'Batalkan',
+                  style: redTextStyle.copyWith(
+                    fontWeight: semibold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: bgLightColor,
+      body:
+          isLoading ? const LoadingWidget('Sedang Mencari Mekanik') : content(),
     );
   }
 }

@@ -5,8 +5,8 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [Text('THIS IS WISHLIST')],
+    return const Center(
+      child: Text('THIS IS CART PAGE'),
     );
   }
 }
