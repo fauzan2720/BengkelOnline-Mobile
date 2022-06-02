@@ -1,6 +1,8 @@
 import 'package:bengkel_online/pages/add_location.dart';
 import 'package:bengkel_online/pages/add_vehicle.dart';
 import 'package:bengkel_online/pages/edit_password.dart';
+import 'package:bengkel_online/pages/mechanic/home_page.dart';
+import 'package:bengkel_online/pages/products.dart';
 import 'package:bengkel_online/pages/result_call_mechanic.dart';
 import 'package:bengkel_online/pages/edit_profile.dart';
 import 'package:bengkel_online/pages/home/call_mechanic_page.dart';
@@ -15,6 +17,7 @@ import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/providers/call_mechanic_provider.dart';
 import 'package:bengkel_online/providers/location_provider.dart';
 import 'package:bengkel_online/providers/product_provider.dart';
+import 'package:bengkel_online/providers/transaction_provider.dart';
 import 'package:bengkel_online/providers/vehicle_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +48,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => CallMechanicProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => TransactionProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -62,6 +68,10 @@ class MyApp extends StatelessWidget {
           'add-vehicle': (context) => const AddVehicle(),
           'location': (context) => const LocationPage(),
           'add-location': (context) => const AddLocation(),
+          'products': (context) => const ProductsPage(),
+
+          // halaman mekanik
+          'mechanic-home': (context) => const MechanicHomePage(),
         },
       ),
     );

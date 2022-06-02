@@ -1,8 +1,9 @@
 import 'package:bengkel_online/pages/home/cart_page.dart';
 import 'package:bengkel_online/pages/home/home_page.dart';
 import 'package:bengkel_online/pages/home/profile_page.dart';
-import 'package:bengkel_online/pages/home/transactions_page.dart';
+import 'package:bengkel_online/pages/home/history_page.dart';
 import 'package:bengkel_online/providers/auth_provider.dart';
+import 'package:bengkel_online/providers/call_mechanic_provider.dart';
 import 'package:bengkel_online/providers/vehicle_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:bengkel_online/widgets/loading_wdiget.dart';
@@ -25,6 +26,15 @@ class _MainPageState extends State<MainPage> {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     VehicleProvider vehicleProvider =
         Provider.of<VehicleProvider>(context, listen: false);
+    CallMechanicProvider callMechanicProvider =
+        Provider.of<CallMechanicProvider>(context);
+
+    setState(() {
+      if (authProvider.user.roles == 'MEKANIK') {
+        Navigator.pushNamedAndRemoveUntil(
+            context, 'mechanic-home', (route) => false);
+      }
+    });
 
     handleCallMechanic() async {
       setState(() {
@@ -57,11 +67,41 @@ class _MainPageState extends State<MainPage> {
             child: BottomNavigationBar(
               backgroundColor: primaryColor,
               currentIndex: currentIndex,
-              onTap: (value) {
+              onTap: (value) async {
                 print(value);
-                setState(() {
-                  currentIndex = value;
-                });
+
+                if (value == 3) {
+                  if (callMechanicProvider.historyServices.isEmpty) {
+                    setState(() {
+                      isLoading = true;
+                    });
+
+                    await Provider.of<CallMechanicProvider>(context,
+                            listen: false)
+                        .getHistoryServices(
+                      token: authProvider.user.token!,
+                    );
+
+                    Future.delayed(
+                      const Duration(seconds: 1),
+                      () => setState(() {
+                        currentIndex = value;
+                      }),
+                    );
+
+                    setState(() {
+                      isLoading = false;
+                    });
+                  } else {
+                    setState(() {
+                      currentIndex = value;
+                    });
+                  }
+                } else {
+                  setState(() {
+                    currentIndex = value;
+                  });
+                }
               },
               type: BottomNavigationBarType.fixed,
               items: [
@@ -147,7 +187,7 @@ class _MainPageState extends State<MainPage> {
         case 2:
           return const CartPage();
         case 3:
-          return const TransactionsPage();
+          return const HistoryPage();
         case 4:
           return const ProfilePage();
         default:

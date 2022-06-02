@@ -45,6 +45,25 @@ class _HomePageState extends State<HomePage> {
       });
     }
 
+    handleShowProducts() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (productProvider.allProduct.isEmpty) {
+        await Provider.of<ProductProvider>(context, listen: false)
+            .getAllProducts();
+
+        Navigator.pushNamed(context, 'products');
+      } else {
+        Navigator.pushNamed(context, 'products');
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     Widget fastFeatures(
       String imageUrl,
       String text,
@@ -125,23 +144,25 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Hello, ${user.fullname}',
-                            style: whiteTextStyle.copyWith(
-                              fontWeight: medium,
-                              fontSize: 20,
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hello, ${user.fullname}',
+                              style: whiteTextStyle.copyWith(
+                                fontWeight: medium,
+                                fontSize: 20,
+                              ),
                             ),
-                          ),
-                          Text(
-                            '${user.email}',
-                            style: whiteTextStyle.copyWith(
-                              fontSize: 16,
+                            Text(
+                              '${user.email}',
+                              style: whiteTextStyle.copyWith(
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       Image.network(
                         'https://ui-avatars.com/api/?name=${user.fullname}&color=7F9CF5&background=random&rounded=true&size=60',
@@ -154,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                 // CONTENT
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    vertical: 50,
+                    vertical: 40,
                   ),
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.vertical(
@@ -169,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30),
                         child: Text(
-                          'Sparepart yang sering dicari',
+                          'Rekomendasi untuk anda',
                           style: blackTextStyle.copyWith(
                             fontWeight: semibold,
                             fontSize: 20,
@@ -193,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(width: 18),
                               Center(
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: handleShowProducts,
                                   child: Text(
                                     'lihat semua',
                                     style: blackTextStyle,
@@ -246,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                         'assets/img/img_default.png',
                         'Susah cari sparepart? Cari aja di disini',
                         'Cari Sparepart',
-                        () {},
+                        handleShowProducts,
                       ),
                     ],
                   ),
