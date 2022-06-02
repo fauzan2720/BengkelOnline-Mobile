@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 class CallMechanicProvider with ChangeNotifier {
   List<CallMechanicModel> _callMechanics = [];
+  List<CallMechanicModel> _historyServices = [];
 
+  List<CallMechanicModel> get historyServices => _historyServices;
   List<CallMechanicModel> get callMechanics => _callMechanics;
 
   set callMechanics(List<CallMechanicModel> callMechanics) {
@@ -12,13 +14,18 @@ class CallMechanicProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getCallMechanic(
-    String token,
-  ) async {
+  set historyServices(List<CallMechanicModel> historyServices) {
+    _historyServices = historyServices;
+    notifyListeners();
+  }
+
+  Future<void> getHistoryServices({
+    var token,
+  }) async {
     try {
-      List<CallMechanicModel> callMechanics =
-          await CallMechanicService().getCallMechanic(token);
-      _callMechanics = callMechanics;
+      List<CallMechanicModel> historyServices =
+          await CallMechanicService().getHistoryServices(token: token);
+      _historyServices = historyServices;
     } catch (e) {
       print(e);
     }
