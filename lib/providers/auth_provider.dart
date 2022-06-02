@@ -55,10 +55,10 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<bool> update({
-    required String token,
-    required String fullname,
-    required String phoneNumber,
-    required String pinNumber,
+    var token,
+    String? fullname,
+    String? phoneNumber,
+    String? pinNumber,
   }) async {
     try {
       UserModel user = await AuthService().update(
