@@ -3,6 +3,7 @@ import 'package:bengkel_online/models/gallery_model.dart';
 class ProductModel {
   int? id;
   String? productName;
+  String? productCategory;
   double? price;
   int? trends;
   DateTime? createdAt;
@@ -12,6 +13,7 @@ class ProductModel {
   ProductModel({
     this.id,
     this.productName,
+    this.productCategory,
     this.price,
     this.trends,
     this.createdAt,
@@ -22,6 +24,7 @@ class ProductModel {
   ProductModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     productName = json['product_name'];
+    productCategory = json['product_category'];
     price = double.parse(json['price'].toString());
     trends = json['trends'];
     galleries = json['galleries']
@@ -35,6 +38,7 @@ class ProductModel {
     return {
       'id': id,
       'product_name': productName,
+      'product_category': productCategory,
       'price': price,
       'trends': trends,
       'galleries': galleries?.map((gallery) => gallery.toJson()).toList(),

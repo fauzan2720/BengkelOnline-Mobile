@@ -4,13 +4,24 @@ import 'package:flutter/material.dart';
 
 class ProductProvider with ChangeNotifier {
   List<ProductModel> _products = [];
+  List<ProductModel> _allProduct = [];
   List<ProductModel> _productoils = [];
 
   List<ProductModel> get products => _products;
+  List<ProductModel> get allProduct => _allProduct;
   List<ProductModel> get productoils => _productoils;
 
   set products(List<ProductModel> products) {
     _products = products;
+    notifyListeners();
+  }
+
+  set allProduct(List<ProductModel> allProduct) {
+    _allProduct = allProduct;
+    notifyListeners();
+  }
+
+  set productoils(List<ProductModel> productoils) {
     _productoils = productoils;
     notifyListeners();
   }
@@ -19,6 +30,15 @@ class ProductProvider with ChangeNotifier {
     try {
       List<ProductModel> products = await ProductService().getProducts();
       _products = products;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getAllProducts() async {
+    try {
+      List<ProductModel> allProduct = await ProductService().getAllProducts();
+      _allProduct = allProduct;
     } catch (e) {
       print(e);
     }

@@ -1,4 +1,5 @@
 import 'package:bengkel_online/models/product_model.dart';
+import 'package:bengkel_online/pages/product_detail.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -10,12 +11,12 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => ProductPage(product),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailPage(product),
+          ),
+        );
       },
       child: Container(
         width: 150,
@@ -42,6 +43,7 @@ class ProductCard extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 '${product.productName}',
+                maxLines: 1,
                 style: blackTextStyle.copyWith(
                   fontWeight: medium,
                 ),
