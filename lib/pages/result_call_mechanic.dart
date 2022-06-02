@@ -115,7 +115,7 @@ class CallMechanic extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Detail Pesanan:',
+                  'Detail Servis:',
                   style: blackTextStyle.copyWith(
                     fontWeight: medium,
                     fontSize: 16,
@@ -223,7 +223,7 @@ class CallMechanic extends StatelessWidget {
                 // Navigator.pushNamed(context, 'confirm');
               },
               child: Text(
-                'Selesaikan Pesanan',
+                'Selesaikan Servis',
                 style: whiteTextStyle.copyWith(
                   fontWeight: semibold,
                   fontSize: 16,
