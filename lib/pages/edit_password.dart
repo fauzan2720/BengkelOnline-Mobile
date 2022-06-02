@@ -42,7 +42,7 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
           token: user.token!,
           password: newPasswordController.text,
         )) {
-          Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor: greenColor,

@@ -74,16 +74,12 @@ class AuthService {
   }
 
   Future<UserModel> update({
-    required String token,
-    required String fullname,
-    required String phoneNumber,
-    required String pinNumber,
+    var token,
+    String? fullname,
+    String? phoneNumber,
+    String? pinNumber,
   }) async {
     var url = '$baseUrl/user';
-    var headers = {
-      'Content-Type': 'application/json',
-      'Authorization': token,
-    };
     var body = jsonEncode({
       'fullname': fullname,
       'phone_number': phoneNumber,
@@ -92,18 +88,21 @@ class AuthService {
 
     var response = await http.post(
       Uri.parse(url),
-      headers: headers,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+      },
       body: body,
     );
 
-    print(response.body);
+    // print(response.body);
 
     if (response.statusCode == 200) {
-      // AuthService().logout(token: token);
+      AuthService().logout(token: token);
 
       var data = jsonDecode(response.body)['data'];
       UserModel user = UserModel.fromJson(data['user']);
-      // user.token = 'Bearer ' + data['access_token'];
+      user.token = 'Bearer ' + data['access_token'];
 
       return user;
     } else {
@@ -130,14 +129,14 @@ class AuthService {
       body: body,
     );
 
-    print(response.body);
+    // print(response.body);
 
     if (response.statusCode == 200) {
-      // AuthService().logout(token: token);
+      AuthService().logout(token: token);
 
       var data = jsonDecode(response.body)['data'];
       UserModel user = UserModel.fromJson(data['user']);
-      // user.token = 'Bearer ' + data['access_token'];
+      user.token = 'Bearer ' + data['access_token'];
 
       return user;
     } else {
@@ -159,7 +158,7 @@ class AuthService {
       headers: headers,
     );
 
-    print(response.body);
+    // print(response.body);
 
     if (response.statusCode == 200) {
       return true;

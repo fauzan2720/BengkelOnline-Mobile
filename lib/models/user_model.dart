@@ -6,6 +6,7 @@ class UserModel {
   String? pinNumber;
   String? profilePhotoUrl;
   String? token;
+  String? roles;
 
   UserModel({
     this.id,
@@ -15,6 +16,7 @@ class UserModel {
     this.pinNumber,
     this.profilePhotoUrl,
     this.token,
+    this.roles,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -25,6 +27,7 @@ class UserModel {
     pinNumber = json['pin_number'];
     profilePhotoUrl = json['profile_photo_url'];
     token = json['token'];
+    roles = json['roles'];
   }
 
   Map<String, dynamic> toJson() {
@@ -36,6 +39,7 @@ class UserModel {
       'pin_number': pinNumber,
       'profile_photo_url': profilePhotoUrl,
       'token': token,
+      'roles': roles,
     };
   }
 }
