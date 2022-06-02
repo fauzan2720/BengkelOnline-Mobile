@@ -11,6 +11,7 @@ Color yellowColor = const Color(0xffE9B34A);
 Color blueColor = const Color(0xff637BAA);
 Color redColor = const Color(0xffEF1A1C);
 Color iconColor = const Color(0xff990303);
+Color darkGreyColor = const Color(0xff3C3C3C);
 Color transparentColor = Colors.transparent;
 
 TextStyle poppinsTextStyle = GoogleFonts.poppins();
@@ -23,8 +24,16 @@ TextStyle blackTextStyle = GoogleFonts.poppins(
   color: blackColor,
 );
 
+TextStyle darkGreyTextStyle = GoogleFonts.poppins(
+  color: darkGreyColor,
+);
+
 TextStyle greyTextStyle = GoogleFonts.poppins(
   color: greyColor,
+);
+
+TextStyle blueTextStyle = GoogleFonts.poppins(
+  color: blueColor,
 );
 
 TextStyle lightTextStyle = GoogleFonts.poppins(
@@ -33,6 +42,14 @@ TextStyle lightTextStyle = GoogleFonts.poppins(
 
 TextStyle redTextStyle = GoogleFonts.poppins(
   color: redColor,
+);
+
+TextStyle yellowTextStyle = GoogleFonts.poppins(
+  color: yellowColor,
+);
+
+TextStyle greenTextStyle = GoogleFonts.poppins(
+  color: greenColor,
 );
 
 TextStyle placeholderTextStyle = GoogleFonts.poppins(
