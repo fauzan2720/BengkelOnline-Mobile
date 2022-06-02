@@ -85,10 +85,10 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
           _selectedPayment,
           totalPrice,
         )) {
-          // await Provider.of<CallMechanicProvider>(context, listen: false)
-          //     .getCallMechanic(
-          //   authProvider.user.token.toString(),
-          // );
+          await Provider.of<CallMechanicProvider>(context, listen: false)
+              .getHistoryServices(
+            token: user.token!,
+          );
 
           Future.delayed(
             const Duration(seconds: 1),
@@ -116,10 +116,10 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
         _selectedPayment,
         totalPrice,
       )) {
-        // await Provider.of<CallMechanicProvider>(context, listen: false)
-        //     .getCallMechanic(
-        //   authProvider.user.token.toString(),
-        // );
+        await Provider.of<CallMechanicProvider>(context, listen: false)
+            .getHistoryServices(
+          token: user.token!,
+        );
 
         Future.delayed(
           const Duration(seconds: 1),

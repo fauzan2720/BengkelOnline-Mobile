@@ -7,32 +7,30 @@ import 'package:http/http.dart' as http;
 class CallMechanicService {
   String baseUrl = AppConstants.baseUrl;
 
-  Future<List<CallMechanicModel>> getCallMechanic(
-    String token,
-    // int id,
-  ) async {
-    var url = '$baseUrl/call?id=1';
-    var headers = {
-      'Content-Type': 'application/json',
-      'Authorization': token,
-    };
+  Future<List<CallMechanicModel>> getHistoryServices({
+    var token,
+  }) async {
+    var url = '$baseUrl/call';
 
     var response = await http.get(
       Uri.parse(url),
-      headers: headers,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+      },
     );
 
-    print(response.body);
+    // print(response.body);
 
     if (response.statusCode == 200) {
       List data = jsonDecode(response.body)['data']['data'];
-      List<CallMechanicModel> callMechanic = [];
+      List<CallMechanicModel> historyServices = [];
 
       for (var item in data) {
-        callMechanic.add(CallMechanicModel.fromJson(item));
+        historyServices.add(CallMechanicModel.fromJson(item));
       }
 
-      return callMechanic;
+      return historyServices;
     } else {
       throw Exception('Gagal Get Mechanic!');
     }
@@ -68,7 +66,7 @@ class CallMechanicService {
       body: body,
     );
 
-    print(response.body);
+    // print(response.body);
 
     if (response.statusCode == 200) {
       return true;
@@ -109,7 +107,7 @@ class CallMechanicService {
       body: body,
     );
 
-    print(response.body);
+    // print(response.body);
 
     if (response.statusCode == 200) {
       return true;
