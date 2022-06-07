@@ -1,4 +1,3 @@
-import 'package:bengkel_online/pages/home/cart_page.dart';
 import 'package:bengkel_online/pages/home/home_page.dart';
 import 'package:bengkel_online/pages/home/profile_page.dart';
 import 'package:bengkel_online/pages/home/history_page.dart';
@@ -49,6 +48,18 @@ class _MainPageState extends State<MainPage> {
       } else {
         Navigator.pushNamed(context, 'vehicle');
       }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
+    handleCart() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      Navigator.pushNamed(context, 'cart');
 
       setState(() {
         isLoading = false;
@@ -135,14 +146,17 @@ class _MainPageState extends State<MainPage> {
                   label: '',
                 ),
                 BottomNavigationBarItem(
-                  icon: Container(
-                    margin: const EdgeInsets.only(
-                      top: 15,
-                    ),
-                    child: Icon(
-                      Icons.shopping_bag_rounded,
-                      size: 30,
-                      color: currentIndex == 2 ? greyColor : whiteColor,
+                  icon: GestureDetector(
+                    onTap: handleCart,
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: 15,
+                      ),
+                      child: Icon(
+                        Icons.shopping_bag_rounded,
+                        size: 30,
+                        color: currentIndex == 2 ? greyColor : whiteColor,
+                      ),
                     ),
                   ),
                   label: '',
@@ -184,8 +198,6 @@ class _MainPageState extends State<MainPage> {
       switch (currentIndex) {
         case 0:
           return const HomePage();
-        case 2:
-          return const CartPage();
         case 3:
           return const HistoryPage();
         case 4:

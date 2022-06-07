@@ -1,7 +1,9 @@
 import 'package:bengkel_online/models/product_model.dart';
+import 'package:bengkel_online/providers/cart_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage(this.product, {Key? key}) : super(key: key);
@@ -17,6 +19,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+
     Future<void> showSuccessDialog() async {
       return showDialog(
         context: context,
@@ -68,7 +72,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     width: 160,
                     height: 44,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, 'cart');
+                      },
                       style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -231,6 +237,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   height: 54,
                   child: TextButton(
                     onPressed: () {
+                      cartProvider.addCart(widget.product);
                       showSuccessDialog();
                     },
                     style: TextButton.styleFrom(

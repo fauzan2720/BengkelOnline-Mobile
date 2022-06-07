@@ -1,6 +1,9 @@
 import 'package:bengkel_online/pages/add_location.dart';
 import 'package:bengkel_online/pages/add_vehicle.dart';
+import 'package:bengkel_online/pages/checkout_page.dart';
+import 'package:bengkel_online/pages/checkout_success_page.dart';
 import 'package:bengkel_online/pages/edit_password.dart';
+import 'package:bengkel_online/pages/home/cart_page.dart';
 import 'package:bengkel_online/pages/mechanic/home_page.dart';
 import 'package:bengkel_online/pages/products.dart';
 import 'package:bengkel_online/pages/result_call_mechanic.dart';
@@ -15,6 +18,7 @@ import 'package:bengkel_online/pages/splash_screen.dart';
 import 'package:bengkel_online/pages/vehicles.dart';
 import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/providers/call_mechanic_provider.dart';
+import 'package:bengkel_online/providers/cart_provider.dart';
 import 'package:bengkel_online/providers/location_provider.dart';
 import 'package:bengkel_online/providers/product_provider.dart';
 import 'package:bengkel_online/providers/transaction_provider.dart';
@@ -49,6 +53,9 @@ class MyApp extends StatelessWidget {
           create: (context) => CallMechanicProvider(),
         ),
         ChangeNotifierProvider(
+          create: (context) => CartProvider(),
+        ),
+        ChangeNotifierProvider(
           create: (context) => TransactionProvider(),
         ),
       ],
@@ -69,6 +76,9 @@ class MyApp extends StatelessWidget {
           'location': (context) => const LocationPage(),
           'add-location': (context) => const AddLocation(),
           'products': (context) => const ProductsPage(),
+          'cart': (context) => const CartPage(),
+          'checkout': (context) => const CheckoutPage(),
+          'checkout-success': (context) => const CheckoutSuccessPage(),
 
           // halaman mekanik
           'mechanic-home': (context) => const MechanicHomePage(),

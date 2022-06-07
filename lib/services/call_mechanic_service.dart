@@ -57,7 +57,7 @@ class CallMechanicService {
       'detail_problem': detailProblem,
       'payment_method': paymentMethod,
       'total_payment': totalPayment,
-      'status': 'perjalanan',
+      'status': 'proses',
     });
 
     var response = await http.post(
@@ -98,7 +98,7 @@ class CallMechanicService {
       'detail_problem': detailProblem,
       'payment_method': paymentMethod,
       'total_payment': totalPayment,
-      'status': 'perjalanan',
+      'status': 'proses',
     });
 
     var response = await http.post(
