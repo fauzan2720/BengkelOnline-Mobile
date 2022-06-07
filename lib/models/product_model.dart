@@ -5,7 +5,7 @@ class ProductModel {
   String? productName;
   String? productCategory;
   double? price;
-  int? trends;
+  String? trends;
   DateTime? createdAt;
   DateTime? updatedAt;
   late List<GalleryModel>? galleries;
