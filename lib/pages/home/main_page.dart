@@ -137,7 +137,7 @@ class _MainPageState extends State<MainPage> {
                         top: 15,
                       ),
                       child: Icon(
-                        Icons.call,
+                        Icons.moped,
                         size: 30,
                         color: currentIndex == 1 ? greyColor : whiteColor,
                       ),

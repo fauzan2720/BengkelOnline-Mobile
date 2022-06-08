@@ -1,7 +1,7 @@
 class TransactionModel {
   int? id;
   String? status;
-  double? totalPayment;
+  String? totalPayment;
   DateTime? createdAt;
   DateTime? updatedAt;
   late List<TransactionItemModel>? items;
@@ -18,7 +18,7 @@ class TransactionModel {
   TransactionModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     status = json['status'];
-    totalPayment = double.parse(json['total_payment'].toString());
+    totalPayment = json['total_payment'];
     items = json['items']
         .map<TransactionItemModel>(
             (items) => TransactionItemModel.fromJson(items))

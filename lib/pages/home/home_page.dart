@@ -78,9 +78,13 @@ class _HomePageState extends State<HomePage> {
           children: [
             Flexible(
               flex: 1,
-              child: Image.asset(
-                imageUrl,
-                width: double.infinity,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  imageUrl,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(width: 12),
@@ -252,19 +256,19 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       fastFeatures(
-                        'assets/img/img_default.png',
+                        'http://ae01.alicdn.com/kf/H36b10080f4bc4e4ea59cbec53b7522d5K.jpg',
                         'Panggil Mekanik jika KM anda mencapai 16.058KM',
                         'Panggil Sekarang',
                         handleCallMechanic,
                       ),
                       fastFeatures(
-                        'assets/img/img_default.png',
+                        'https://www.astramotor-md.co.id/wp-content/uploads/2020/05/WhatsApp-Image-2020-05-13-at-11.39.41-2.jpeg',
                         'Mogok dan susah cari bengkel? Panggil Mekanik aja',
                         'Panggil Sekarang',
                         handleCallMechanic,
                       ),
                       fastFeatures(
-                        'assets/img/img_default.png',
+                        'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_640/v1608290419/pw0nfekk2ssnxurv85pz.jpg',
                         'Susah cari sparepart? Cari aja di disini',
                         'Cari Sparepart',
                         handleShowProducts,

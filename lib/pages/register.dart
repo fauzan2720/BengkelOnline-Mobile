@@ -44,6 +44,26 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         );
+      } else if (pinController.text.length != 6) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: primaryColor,
+            content: const Text(
+              'Buat pin dengan 6 digit',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      } else if (passwordController.text.length < 8) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: primaryColor,
+            content: const Text(
+              'Password minimal 8 karakter',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
       } else if (await authProvider.register(
         fullname: nameController.text,
         phoneNumber: phoneController.text,

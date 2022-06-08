@@ -47,14 +47,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                   ),
                   Image.asset(
-                    'assets/img/img_default.png',
+                    'assets/img/ic_success.png',
                     width: 100,
                     height: 100,
                   ),
                   const SizedBox(height: 12),
                   Text(
                     'Hurray :)',
-                    style: whiteTextStyle.copyWith(
+                    style: blackTextStyle.copyWith(
                       fontWeight: semibold,
                       fontSize: 18,
                     ),

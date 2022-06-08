@@ -3,7 +3,7 @@ class CallMechanicModel {
   String? typeOfWork;
   String? detailProblem;
   String? paymentMethod;
-  double? totalPayment;
+  String? totalPayment;
   String? status;
   // late VehicleModel? vehicle;
   // late LocationModel? location;

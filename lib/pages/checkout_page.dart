@@ -33,8 +33,7 @@ class CheckoutPage extends StatelessWidget {
     Widget content() {
       return Container(
         margin: const EdgeInsets.all(30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
             Text(
               'List Items',
