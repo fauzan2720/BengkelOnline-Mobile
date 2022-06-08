@@ -148,7 +148,7 @@ class _VehicleTileState extends State<VehicleTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Pilih Kendaraan',
+                    'Kendaraan Saya',
                     style: blackTextStyle.copyWith(
                       fontWeight: semibold,
                       fontSize: 16,

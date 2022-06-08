@@ -74,16 +74,26 @@ class _HistoryPageState extends State<HistoryPage> {
     Widget header() {
       return AppBar(
         backgroundColor: primaryColor,
-        centerTitle: true,
         automaticallyImplyLeading: false,
         elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.restorablePushNamedAndRemoveUntil(
+                context, 'home', (route) => false);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: whiteColor,
+          ),
+        ),
         title: Text(
           isSelected == 0 ? 'Riwayat Servis' : 'Riwayat Pembelian',
           style: whiteTextStyle.copyWith(
-            fontSize: 18,
             fontWeight: medium,
+            fontSize: 18,
           ),
         ),
+        centerTitle: true,
       );
     }
 

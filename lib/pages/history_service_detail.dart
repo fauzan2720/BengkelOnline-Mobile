@@ -1,48 +1,16 @@
 import 'package:bengkel_online/models/call_mechanic_model.dart';
-import 'package:bengkel_online/providers/call_mechanic_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class CallMechanic extends StatelessWidget {
-  const CallMechanic({Key? key}) : super(key: key);
+class HistoryServiceDetail extends StatelessWidget {
+  const HistoryServiceDetail(this.callMechanic, {Key? key}) : super(key: key);
+  final CallMechanicModel callMechanic;
 
   @override
   Widget build(BuildContext context) {
-    CallMechanicProvider callMechanicProvider =
-        Provider.of<CallMechanicProvider>(context);
-    CallMechanicModel callMechanic = callMechanicProvider.callMechanics[0];
-
     return Scaffold(
       body: ListView(
         children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  // '${callMechanic.vehicle!.photoUrl}',
-                  'https://ui-avatars.com/api/?name=${callMechanic.mechanic}&color=7F9CF5&background=EBF4FF&rounded=true&size=64',
-                  width: double.infinity,
-                ),
-              ),
-              GestureDetector(
-                onTap: () => Navigator.pushNamedAndRemoveUntil(
-                    context, 'home', (route) => false),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 30,
-                    horizontal: 20,
-                  ),
-                  child: Image.asset(
-                    'assets/img/ic_back.png',
-                    width: 60,
-                  ),
-                ),
-              ),
-            ],
-          ),
-
           // PROFIL
           Container(
             padding: const EdgeInsets.symmetric(
@@ -84,26 +52,26 @@ class CallMechanic extends StatelessWidget {
           const SizedBox(height: 40),
 
           // CONTACT
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/img/ic_whatsapp.png',
-                height: 40,
-              ),
-              const SizedBox(width: 14),
-              Image.asset(
-                'assets/img/ic_sms.png',
-                height: 40,
-              ),
-              const SizedBox(width: 14),
-              Image.asset(
-                'assets/img/ic_telephone.png',
-                height: 40,
-              ),
-            ],
-          ),
-          const SizedBox(height: 36),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Image.asset(
+          //       'assets/img/ic_whatsapp.png',
+          //       height: 40,
+          //     ),
+          //     const SizedBox(width: 14),
+          //     Image.asset(
+          //       'assets/img/ic_sms.png',
+          //       height: 40,
+          //     ),
+          //     const SizedBox(width: 14),
+          //     Image.asset(
+          //       'assets/img/ic_telephone.png',
+          //       height: 40,
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(height: 36),
 
           // PART YANG DIGANTI
           Container(
@@ -181,49 +149,7 @@ class CallMechanic extends StatelessWidget {
           ),
           const SizedBox(height: 40),
 
-          // BUTTON NEXT TO PAYMENT
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 30),
-            width: double.infinity,
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
-              gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xffF30F0F),
-                  Color(0xffD3717C),
-                ],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.25),
-                  spreadRadius: 0,
-                  blurRadius: 4,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: TextButton(
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, 'home', (route) => false);
-              },
-              child: Text(
-                'Kembali ke Beranda',
-                style: whiteTextStyle.copyWith(
-                  fontWeight: semibold,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // BUTTON CANCEL
+          // BUTTON BACK
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 30),
             width: double.infinity,
@@ -236,10 +162,10 @@ class CallMechanic extends StatelessWidget {
             ),
             child: TextButton(
               onPressed: () {
-                // Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: Text(
-                'Batalkan',
+                'Kembali',
                 style: redTextStyle.copyWith(
                   fontWeight: semibold,
                   fontSize: 16,

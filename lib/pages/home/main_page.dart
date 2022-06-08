@@ -28,10 +28,30 @@ class _MainPageState extends State<MainPage> {
     CallMechanicProvider callMechanicProvider =
         Provider.of<CallMechanicProvider>(context);
 
+    getInit() async {
+      await Provider.of<CallMechanicProvider>(context, listen: false)
+          .getHistoryServices(
+        token: authProvider.user.token!,
+      );
+
+      // Future.delayed(
+      //   const Duration(seconds: 1),
+      //   () async {
+      //     await Provider.of<CallMechanicProvider>(context, listen: false)
+      //         .getHistoryServicesMechanic(
+      //       token: authProvider.user.token,
+      //       mechanic: authProvider.user.fullname,
+      //     );
+      //   },
+      // );
+
+      Navigator.pushNamedAndRemoveUntil(
+          context, 'mechanic-home', (route) => false);
+    }
+
     setState(() {
       if (authProvider.user.roles == 'MEKANIK') {
-        Navigator.pushNamedAndRemoveUntil(
-            context, 'mechanic-home', (route) => false);
+        getInit();
       }
     });
 

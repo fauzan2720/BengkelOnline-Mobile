@@ -14,6 +14,7 @@ import 'package:bengkel_online/pages/location.dart';
 import 'package:bengkel_online/pages/login.dart';
 import 'package:bengkel_online/pages/pin_confirmation.dart';
 import 'package:bengkel_online/pages/register.dart';
+import 'package:bengkel_online/pages/show_history_transactions.dart';
 import 'package:bengkel_online/pages/splash_screen.dart';
 import 'package:bengkel_online/pages/vehicles.dart';
 import 'package:bengkel_online/providers/auth_provider.dart';
@@ -79,6 +80,8 @@ class MyApp extends StatelessWidget {
           'cart': (context) => const CartPage(),
           'checkout': (context) => const CheckoutPage(),
           'checkout-success': (context) => const CheckoutSuccessPage(),
+          'show-history-transactions': (context) =>
+              const ShowHistoryTransactions(),
 
           // halaman mekanik
           'mechanic-home': (context) => const MechanicHomePage(),

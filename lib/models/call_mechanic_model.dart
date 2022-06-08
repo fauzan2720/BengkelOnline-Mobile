@@ -1,10 +1,12 @@
 class CallMechanicModel {
   int? id;
+  String? mechanic;
   String? typeOfWork;
   String? detailProblem;
   String? paymentMethod;
   String? totalPayment;
   String? status;
+  String? vehicleId;
   // late VehicleModel? vehicle;
   // late LocationModel? location;
   // late ProductModel? product;
@@ -13,12 +15,13 @@ class CallMechanicModel {
 
   CallMechanicModel({
     this.id,
+    this.mechanic,
     this.typeOfWork,
     this.detailProblem,
     this.paymentMethod,
     this.totalPayment,
     this.status,
-    // this.vehicle,
+    this.vehicleId,
     // this.location,
     // this.product,
     this.createdAt,
@@ -27,11 +30,13 @@ class CallMechanicModel {
 
   CallMechanicModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    mechanic = json['mechanic'];
     typeOfWork = json['type_of_work'];
     detailProblem = json['detail_problem'];
     paymentMethod = json['payment_method'];
     totalPayment = json['total_payment'];
     status = json['status'];
+    vehicleId = json['vehicle_id'];
     // vehicle = VehicleModel.fromJson(json['vehicle']);
     // location = LocationModel.fromJson(json['location']);
     // product = ProductModel.fromJson(json['location']);
@@ -42,11 +47,13 @@ class CallMechanicModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'mechanic': mechanic,
       'type_of_work': typeOfWork,
       'detail_problem': detailProblem,
       'payment_method': paymentMethod,
       'total_payment': totalPayment,
       'status': status,
+      'vehicle': vehicleId,
       // 'vehicle': vehicle!.toJson(),
       // 'location': location!.toJson(),
       // 'product': product!.toJson(),

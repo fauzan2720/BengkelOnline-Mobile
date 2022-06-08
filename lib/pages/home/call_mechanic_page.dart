@@ -83,7 +83,7 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
           _typeOfWork,
           problemController.text,
           _selectedPayment,
-          totalPrice,
+          totalPrice.toString(),
         )) {
           await Provider.of<CallMechanicProvider>(context, listen: false)
               .getHistoryServices(
@@ -91,8 +91,9 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
           );
 
           Future.delayed(
-            const Duration(seconds: 1),
-            () => Navigator.pushReplacementNamed(context, 'call-mechanic'),
+            const Duration(seconds: 2),
+            () => Navigator.pushReplacementNamed(
+                context, 'show-history-transactions'),
           );
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -114,7 +115,7 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
         _typeOfWork,
         problemController.text,
         _selectedPayment,
-        totalPrice,
+        totalPrice.toString(),
       )) {
         await Provider.of<CallMechanicProvider>(context, listen: false)
             .getHistoryServices(
@@ -122,8 +123,9 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
         );
 
         Future.delayed(
-          const Duration(seconds: 1),
-          () => Navigator.pushReplacementNamed(context, 'call-mechanic'),
+          const Duration(seconds: 2),
+          () => Navigator.pushReplacementNamed(
+              context, 'show-history-transactions'),
         );
 
         ScaffoldMessenger.of(context).showSnackBar(

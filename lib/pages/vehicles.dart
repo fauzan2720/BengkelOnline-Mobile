@@ -32,7 +32,7 @@ class _VehiclePageState extends State<VehiclePage> {
           ),
         ),
         title: Text(
-          'Data Kendaraan',
+          'Pilih Kendaraan',
           style: whiteTextStyle.copyWith(
             fontWeight: medium,
             fontSize: 18,
