@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/providers/vehicle_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class AddVehicle extends StatefulWidget {
@@ -12,6 +15,14 @@ class AddVehicle extends StatefulWidget {
 }
 
 class _AddVehicleState extends State<AddVehicle> {
+  // String baseUrl = AppConstants.baseUrl;
+
+  // XFile? image;
+
+  // List _images = [];
+  dynamic selectedImage;
+  final picker = ImagePicker();
+
   @override
   Widget build(BuildContext context) {
     VehicleProvider vehicleProvider = Provider.of<VehicleProvider>(context);
@@ -35,10 +46,12 @@ class _AddVehicleState extends State<AddVehicle> {
           ),
         );
       } else if (await vehicleProvider.createVehicle(
+        selectedImage,
+        'selectedImage',
         authProvider.user.token!,
         vehicleNameController.text,
         numberPlateController.text,
-        'https://elitebba.com/wp-content/uploads/2017/04/default-image.jpg',
+        // 'https://elitebba.com/wp-content/uploads/2017/04/default-image.jpg',
       )) {
         await Provider.of<VehicleProvider>(context, listen: false).getVehicles(
           authProvider.user.token.toString(),
@@ -141,6 +154,51 @@ class _AddVehicleState extends State<AddVehicle> {
       );
     }
 
+    Widget image() {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: selectedImage == null
+            ? Stack(
+                children: [
+                  Image.asset('assets/img/img_default.png'),
+                  GestureDetector(
+                    onTap: getImage,
+                    // onTap: () {
+                    //   sendImage(ImageSource.camera);
+                    // },
+                    child: Center(
+                      child: Container(
+                        width: 132,
+                        margin: const EdgeInsets.only(top: 150),
+                        padding: const EdgeInsets.fromLTRB(16, 16, 0, 16),
+                        decoration: BoxDecoration(
+                          color: bgLightColor,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Ambil Foto',
+                              style: blackTextStyle,
+                            ),
+                            const SizedBox(width: 7),
+                            Icon(
+                              Icons.camera_alt_outlined,
+                              color: blackColor,
+                              size: 18,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : Image.file(selectedImage!),
+      );
+    }
+
     return Scaffold(
       appBar: header(),
       body: Container(
@@ -153,9 +211,7 @@ class _AddVehicleState extends State<AddVehicle> {
             const SizedBox(height: 20),
             formInput('Nomor Plat', numberPlateController, TextInputType.text),
             const SizedBox(height: 40),
-            ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset('assets/img/img_default.png')),
+            image(),
             const SizedBox(height: 40),
 
             // BUTOON
@@ -199,5 +255,60 @@ class _AddVehicleState extends State<AddVehicle> {
         ),
       ),
     );
+  }
+
+  // Future sendImage(ImageSource media) async {
+  //   var img = await picker.pickImage(source: media);
+
+  //   var url = '$baseUrl/vehicles';
+
+  //   var request = http.MultipartRequest('POST', Uri.parse(url));
+
+  //   if (img != null) {
+  //     var pic = await http.MultipartFile.fromPath("image", img.path);
+
+  //     request.files.add(pic);
+
+  //     await request.send().then((result) {
+  //       http.Response.fromStream(result).then((response) {
+  //         var message = jsonDecode(response.body);
+
+  //         // show snackbar if input data successfully
+  //         final snackBar = SnackBar(content: Text(message['message']));
+  //         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+  //         //get new list images
+  //         getImageServer();
+  //       });
+  //     }).catchError((e) {
+  //       print(e);
+  //     });
+  //   }
+  // }
+
+  // Future getImageServer() async {
+  //   try {
+  //     final response = await http.get(Uri.parse(
+  //         'http://192.168.1.4/latihan/flutter_upload_image/list.php'));
+
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+
+  //       setState(() {
+  //         _images = data;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+  Future getImage() async {
+    // buka kamera
+    var photo = await picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      selectedImage = File(photo!.path);
+    });
   }
 }

@@ -41,7 +41,7 @@ class _EditVehicleState extends State<EditVehicle> {
         widget.vehicle.id.toString(),
         vehicleNameController.text,
         numberPlateController.text,
-        'https://www.kindpng.com/picc/m/189-1893945_transparent-important-update-hd-png-download.png',
+        widget.vehicle.photoUrl!,
       )) {
         await Provider.of<VehicleProvider>(context, listen: false).getVehicles(
           authProvider.user.token.toString(),

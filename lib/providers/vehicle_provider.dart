@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:bengkel_online/models/vehicle_model.dart';
 import 'package:bengkel_online/services/vehicle_service.dart';
 import 'package:flutter/material.dart';
@@ -37,17 +39,21 @@ class VehicleProvider with ChangeNotifier {
   }
 
   Future<bool> createVehicle(
+    File? file,
+    String filename,
     String token,
     String vehicleName,
     String numberPlate,
-    String photoUrl,
+    // String photoUrl,
   ) async {
     try {
       if (await VehicleService().createVehicle(
+        file,
+        filename,
         token,
         vehicleName,
         numberPlate,
-        photoUrl,
+        // photoUrl,
       )) {
         return true;
       } else {
