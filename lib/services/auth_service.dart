@@ -11,7 +11,7 @@ class AuthService {
     String? fullname,
     String? phoneNumber,
     String? email,
-    String? pinNumber,
+    // String? pinNumber,
     String? password,
   }) async {
     var url = '$baseUrl/register';
@@ -20,7 +20,7 @@ class AuthService {
       'fullname': fullname,
       'phone_number': phoneNumber,
       'email': email,
-      'pin_number': pinNumber,
+      // 'pin_number': pinNumber,
       'password': password,
     });
 
@@ -77,13 +77,13 @@ class AuthService {
     var token,
     String? fullname,
     String? phoneNumber,
-    String? pinNumber,
+    // String? pinNumber,
   }) async {
     var url = '$baseUrl/user';
     var body = jsonEncode({
       'fullname': fullname,
       'phone_number': phoneNumber,
-      'pin_number': pinNumber,
+      // 'pin_number': pinNumber,
     });
 
     var response = await http.post(

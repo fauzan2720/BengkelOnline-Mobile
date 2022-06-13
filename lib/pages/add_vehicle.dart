@@ -46,12 +46,12 @@ class _AddVehicleState extends State<AddVehicle> {
           ),
         );
       } else if (await vehicleProvider.createVehicle(
-        selectedImage,
-        'selectedImage',
+        // selectedImage,
+        // 'selectedImage',
         authProvider.user.token!,
         vehicleNameController.text,
         numberPlateController.text,
-        // 'https://elitebba.com/wp-content/uploads/2017/04/default-image.jpg',
+        'https://elitebba.com/wp-content/uploads/2017/04/default-image.jpg',
       )) {
         await Provider.of<VehicleProvider>(context, listen: false).getVehicles(
           authProvider.user.token.toString(),
@@ -137,16 +137,14 @@ class _AddVehicleState extends State<AddVehicle> {
                 ),
               ],
             ),
-            child: Expanded(
-              child: TextFormField(
-                keyboardType: keyboardType,
-                controller: controller,
-                style: poppinsTextStyle,
-                decoration: InputDecoration(
-                  hintText: text,
-                  hintStyle: placeholderTextStyle,
-                  border: InputBorder.none,
-                ),
+            child: TextFormField(
+              keyboardType: keyboardType,
+              controller: controller,
+              style: poppinsTextStyle,
+              decoration: InputDecoration(
+                hintText: text,
+                hintStyle: placeholderTextStyle,
+                border: InputBorder.none,
               ),
             ),
           ),

@@ -16,7 +16,7 @@ class AuthProvider with ChangeNotifier {
     String? fullname,
     String? phoneNumber,
     String? email,
-    String? pin,
+    // String? pin,
     String? password,
   }) async {
     try {
@@ -24,7 +24,7 @@ class AuthProvider with ChangeNotifier {
         fullname: fullname,
         phoneNumber: phoneNumber,
         email: email,
-        pinNumber: pin,
+        // pinNumber: pin,
         password: password,
       );
 
@@ -58,14 +58,14 @@ class AuthProvider with ChangeNotifier {
     var token,
     String? fullname,
     String? phoneNumber,
-    String? pinNumber,
+    // String? pinNumber,
   }) async {
     try {
       UserModel user = await AuthService().update(
         token: token,
         fullname: fullname,
         phoneNumber: phoneNumber,
-        pinNumber: pinNumber,
+        // pinNumber: pinNumber,
       );
 
       _user = user;

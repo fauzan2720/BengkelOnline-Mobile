@@ -21,13 +21,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
         TextEditingController(text: user.fullname);
     TextEditingController phoneController =
         TextEditingController(text: user.phoneNumber);
-    TextEditingController pinController =
-        TextEditingController(text: user.pinNumber.toString());
+    // TextEditingController pinController =
+    //     TextEditingController(text: user.pinNumber);
 
     handleUpdate() async {
       if (nameController.text.isEmpty ||
-          phoneController.text.isEmpty ||
-          pinController.text.isEmpty) {
+          phoneController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: primaryColor,
@@ -41,7 +40,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         token: user.token.toString(),
         fullname: nameController.text,
         phoneNumber: phoneController.text,
-        pinNumber: pinController.text,
+        // pinNumber: pinController.text,
       )) {
         Navigator.pushNamed(context, 'home');
         ScaffoldMessenger.of(context).showSnackBar(
@@ -173,12 +172,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
               phoneController,
               false,
             ),
-            formInput(
-              Icons.confirmation_number,
-              'Nomor Pin (6 digit)',
-              pinController,
-              true,
-            ),
+            // formInput(
+            //   Icons.confirmation_number,
+            //   'Nomor Pin (6 digit)',
+            //   pinController,
+            //   true,
+            // ),
             const SizedBox(height: 30),
           ],
         ),
