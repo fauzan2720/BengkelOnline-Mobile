@@ -127,16 +127,14 @@ class _EditVehicleState extends State<EditVehicle> {
                 ),
               ],
             ),
-            child: Expanded(
-              child: TextFormField(
-                keyboardType: keyboardType,
-                controller: controller,
-                style: poppinsTextStyle,
-                decoration: InputDecoration(
-                  hintText: text,
-                  hintStyle: placeholderTextStyle,
-                  border: InputBorder.none,
-                ),
+            child: TextFormField(
+              keyboardType: keyboardType,
+              controller: controller,
+              style: poppinsTextStyle,
+              decoration: InputDecoration(
+                hintText: text,
+                hintStyle: placeholderTextStyle,
+                border: InputBorder.none,
               ),
             ),
           ),

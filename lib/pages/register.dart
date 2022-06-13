@@ -13,13 +13,15 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool showPassword = true;
+  bool showPassword2 = true;
   bool isLoading = false;
 
   TextEditingController nameController = TextEditingController(text: '');
   TextEditingController phoneController = TextEditingController(text: '');
   TextEditingController emailController = TextEditingController(text: '');
-  TextEditingController pinController = TextEditingController(text: '');
+  // TextEditingController pinController = TextEditingController(text: '');
   TextEditingController passwordController = TextEditingController(text: '');
+  TextEditingController confirmPasswordController = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,9 @@ class _RegisterPageState extends State<RegisterPage> {
       if (nameController.text.isEmpty ||
           phoneController.text.isEmpty ||
           emailController.text.isEmpty ||
-          pinController.text.isEmpty ||
-          passwordController.text.isEmpty) {
+          // pinController.text.isEmpty ||
+          passwordController.text.isEmpty ||
+          confirmPasswordController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: primaryColor,
@@ -44,12 +47,22 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         );
-      } else if (pinController.text.length != 6) {
+      // } else if (pinController.text.length != 6) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(
+      //       backgroundColor: primaryColor,
+      //       content: const Text(
+      //         'Buat pin dengan 6 digit',
+      //         textAlign: TextAlign.center,
+      //       ),
+      //     ),
+      //   );
+      } else if (passwordController.text != confirmPasswordController.text) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: primaryColor,
             content: const Text(
-              'Buat pin dengan 6 digit',
+              'Konfirmasi Password Salah',
               textAlign: TextAlign.center,
             ),
           ),
@@ -68,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
         fullname: nameController.text,
         phoneNumber: phoneController.text,
         email: emailController.text,
-        pin: pinController.text,
+        // pin: pinController.text,
         password: passwordController.text,
       )) {
         Navigator.pushNamed(context, 'home');
@@ -175,6 +188,76 @@ class _RegisterPageState extends State<RegisterPage> {
                               },
                               child: Icon(
                                 showPassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: iconColor,
+                              ),
+                            );
+                          },
+                        )
+                      : null,
+                  hintText: placeholder,
+                  hintStyle: placeholderTextStyle,
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget formConfirmPassword(
+      IconData urlIcon,
+      String placeholder,
+      TextEditingController controller,
+      bool obsureText,
+      TextInputType keyboardType,
+    ) {
+      return Container(
+        height: 50,
+        margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.25),
+              spreadRadius: 0,
+              blurRadius: 4,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Icon(
+              urlIcon,
+              color: iconColor,
+            ),
+            const SizedBox(
+              width: 18,
+            ),
+            Expanded(
+              child: TextFormField(
+                keyboardType: keyboardType,
+                obscureText: obsureText,
+                controller: controller,
+                style: poppinsTextStyle,
+                decoration: InputDecoration(
+                  suffixIcon: urlIcon == Icons.lock_outline
+                      ? Builder(
+                          builder: (context) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  showPassword2 = !showPassword2;
+                                });
+                              },
+                              child: Icon(
+                                showPassword2
                                     ? Icons.visibility_off
                                     : Icons.visibility,
                                 color: iconColor,
@@ -304,11 +387,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 formInput(Icons.email, 'Email', emailController, false,
                     TextInputType.emailAddress),
                 const SizedBox(height: 30),
-                formInput(Icons.confirmation_number, 'Nomor Pin (6 digit)',
-                    pinController, false, TextInputType.number),
-                const SizedBox(height: 30),
+                // formInput(Icons.confirmation_number, 'Nomor Pin (6 digit)',
+                //     pinController, false, TextInputType.number),
+                // const SizedBox(height: 30),
                 formInput(Icons.lock_outline, 'Password', passwordController,
                     showPassword, TextInputType.text),
+                const SizedBox(height: 30),
+                formConfirmPassword(Icons.lock_outline, 'Konfirmasi Password', confirmPasswordController,
+                    showPassword2, TextInputType.text),
                 const SizedBox(height: 62),
                 isLoading ? const LoadingButton() : buttonRegistrasi(),
                 const SizedBox(height: 30),

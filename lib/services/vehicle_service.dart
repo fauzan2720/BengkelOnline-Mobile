@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 import 'package:bengkel_online/models/vehicle_model.dart';
 import 'package:bengkel_online/util/app_constants.dart';
 import 'package:http/http.dart' as http;
@@ -69,23 +68,23 @@ class VehicleService {
   }
 
   Future<bool> createVehicle(
-    File? file,
-    String filename,
+    // File? file,
+    // String filename,
     String token,
     String vehicleName,
     String numberPlate,
-    // String photoUrl,
+    String photoUrl,
   ) async {
     var url = '$baseUrl/vehicles';
 
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse(url),
-    );
+    // var request = http.MultipartRequest(
+    //   'POST',
+    //   Uri.parse(url),
+    // );
 
-    var pic = await http.MultipartFile.fromPath('photo_url', filename);
+    // var pic = await http.MultipartFile.fromPath('photo_url', filename);
 
-    request.files.add(pic);
+    // request.files.add(pic);
 
     // await request.send().then((result) {
 
@@ -119,7 +118,7 @@ class VehicleService {
     var body = jsonEncode({
       'vehicle_name': vehicleName,
       'number_plate': numberPlate,
-      // 'photo_url': photoUrl,
+      'photo_url': photoUrl,
     });
 
     var response = await http.post(

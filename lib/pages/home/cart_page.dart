@@ -66,7 +66,7 @@ class CartPage extends StatelessWidget {
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
-                  vertical: 20,
+                  vertical: 10,
                 ),
                 backgroundColor: primaryColor,
                 shape: RoundedRectangleBorder(
