@@ -1,9 +1,11 @@
 import 'package:bengkel_online/pages/add_location.dart';
+import 'package:bengkel_online/pages/add_location_transaction.dart';
 import 'package:bengkel_online/pages/add_vehicle.dart';
 import 'package:bengkel_online/pages/checkout_page.dart';
 import 'package:bengkel_online/pages/checkout_success_page.dart';
 import 'package:bengkel_online/pages/edit_password.dart';
 import 'package:bengkel_online/pages/home/cart_page.dart';
+import 'package:bengkel_online/pages/location_transaction.dart';
 import 'package:bengkel_online/pages/mechanic/home_page.dart';
 import 'package:bengkel_online/pages/products.dart';
 import 'package:bengkel_online/pages/result_call_mechanic.dart';
@@ -14,6 +16,8 @@ import 'package:bengkel_online/pages/location.dart';
 import 'package:bengkel_online/pages/login.dart';
 import 'package:bengkel_online/pages/pin_confirmation.dart';
 import 'package:bengkel_online/pages/register.dart';
+import 'package:bengkel_online/pages/result_search_product.dart';
+import 'package:bengkel_online/pages/search_product.dart';
 import 'package:bengkel_online/pages/show_history_transactions.dart';
 import 'package:bengkel_online/pages/splash_screen.dart';
 import 'package:bengkel_online/pages/vehicles.dart';
@@ -76,7 +80,12 @@ class MyApp extends StatelessWidget {
           'add-vehicle': (context) => const AddVehicle(),
           'location': (context) => const LocationPage(),
           'add-location': (context) => const AddLocation(),
+          'location-transaction': (context) => const LocationTransactionPage(),
+          'add-location-transaction': (context) =>
+              const AddLocationTransaction(),
           'products': (context) => const ProductsPage(),
+          'search': (context) => const SearchProduct(),
+          'result-search': (context) => const ResultSearchProductsPage(),
           'cart': (context) => const CartPage(),
           'checkout': (context) => const CheckoutPage(),
           'checkout-success': (context) => const CheckoutSuccessPage(),

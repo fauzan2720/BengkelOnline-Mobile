@@ -1,15 +1,53 @@
+import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/providers/cart_provider.dart';
+import 'package:bengkel_online/providers/location_provider.dart';
+import 'package:bengkel_online/providers/product_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:bengkel_online/widgets/cart_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CartPage extends StatelessWidget {
+class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
 
   @override
+  State<CartPage> createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  bool isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
     CartProvider cartProvider = Provider.of<CartProvider>(context);
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
+
+    handleShowLocation() async {
+      await Provider.of<LocationProvider>(context, listen: false).getLocations(
+        authProvider.user.token.toString(),
+      );
+      Navigator.pushNamed(context, 'checkout');
+    }
+
+    handleShowProducts() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (productProvider.allProduct.isEmpty) {
+        await Provider.of<ProductProvider>(context, listen: false)
+            .getAllProducts();
+
+        Navigator.pushNamed(context, 'products');
+      } else {
+        Navigator.pushNamed(context, 'products');
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
 
     PreferredSizeWidget header() {
       return AppBar(
@@ -52,10 +90,7 @@ class CartPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             TextButton(
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, 'home', (route) => false);
-              },
+              onPressed: handleShowProducts,
               child: Text(
                 'Kunjungi Marketplace',
                 style: whiteTextStyle.copyWith(
@@ -129,9 +164,7 @@ class CartPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, 'checkout');
-                },
+                onPressed: handleShowLocation,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

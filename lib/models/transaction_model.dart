@@ -1,6 +1,8 @@
 class TransactionModel {
   int? id;
   String? status;
+  String? total;
+  String? shippingPrice;
   String? totalPayment;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -9,6 +11,8 @@ class TransactionModel {
   TransactionModel({
     this.id,
     this.status,
+    this.total,
+    this.shippingPrice,
     this.totalPayment,
     this.createdAt,
     this.updatedAt,
@@ -18,6 +22,8 @@ class TransactionModel {
   TransactionModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     status = json['status'];
+    total = json['total'];
+    shippingPrice = json['shipping_price'];
     totalPayment = json['total_payment'];
     items = json['items']
         .map<TransactionItemModel>(
@@ -31,6 +37,8 @@ class TransactionModel {
     return {
       'id': id,
       'status': status,
+      'total': total,
+      'shipping_price': shippingPrice,
       'total_payment': totalPayment,
       'items': items?.map((items) => items.toJson()).toList(),
       'created_at': createdAt.toString(),
@@ -41,7 +49,7 @@ class TransactionModel {
 
 class TransactionItemModel {
   int? id;
-  int? quantity;
+  String? quantity;
   // late ProductModel? product;
 
   TransactionItemModel({

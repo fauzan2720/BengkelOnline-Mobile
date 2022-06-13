@@ -1,38 +1,77 @@
+import 'package:bengkel_online/providers/product_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/widgets/product_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 
-class CheckoutSuccessPage extends StatefulWidget {
-  const CheckoutSuccessPage({Key? key}) : super(key: key);
+class ResultSearchProductsPage extends StatefulWidget {
+  const ResultSearchProductsPage({Key? key}) : super(key: key);
 
   @override
-  State<CheckoutSuccessPage> createState() => _CheckoutSuccessPageState();
+  State<ResultSearchProductsPage> createState() =>
+      _ResultSearchProductsPageState();
 }
 
-class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
+class _ResultSearchProductsPageState extends State<ResultSearchProductsPage> {
   @override
   Widget build(BuildContext context) {
-    // setState(() {
-    //   HistoryPage.isSelected = 1;
-    // });
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
 
-    Widget header() {
+    PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
-        centerTitle: true,
         automaticallyImplyLeading: false,
         elevation: 0,
-        title: Text(
-          'Transaksi Berhasil',
-          style: whiteTextStyle.copyWith(
-            fontSize: 18,
-            fontWeight: medium,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: whiteColor,
           ),
+        ),
+        title: Text(
+          'Hasil Pencarian',
+          style: whiteTextStyle.copyWith(
+            fontWeight: medium,
+            fontSize: 18,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, 'search');
+            },
+            icon: Icon(
+              Icons.search,
+              color: whiteColor,
+            ),
+          ),
+          const SizedBox(width: 10),
+        ],
+      );
+    }
+
+    Widget result() {
+      return Padding(
+        padding: const EdgeInsets.all(30),
+        child: StaggeredGrid.count(
+          mainAxisSpacing: 12,
+          crossAxisCount: 2,
+          children: productProvider.searchProduct
+              .map(
+                (e) => ProductCard(e),
+              )
+              .toList(),
         ),
       );
     }
 
-    Widget content() {
-      return Expanded(
+    Widget noResult() {
+      return Center(
         child: Container(
           width: double.infinity,
           color: whiteColor,
@@ -45,7 +84,7 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
               ),
               const SizedBox(height: 20),
               Text(
-                'Anda melakukan transaksi',
+                'Opps, produk yang dicari tidak ada',
                 style: blackTextStyle.copyWith(
                   fontSize: 16,
                   fontWeight: medium,
@@ -53,7 +92,7 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
               ),
               const SizedBox(height: 12),
               Text(
-                'Tetap di rumah sementara kami\nsiapkan pesanan Anda',
+                'Cari produk impianmu kembali',
                 style: greyTextStyle,
                 textAlign: TextAlign.center,
               ),
@@ -63,11 +102,10 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
                 height: 44,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, 'home', (route) => false);
+                    Navigator.pop(context);
                   },
                   child: Text(
-                    'Oke',
+                    'Semua Produk',
                     style: whiteTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: medium,
@@ -87,11 +125,10 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
                 height: 44,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, 'show-history-transactions', (route) => false);
+                    Navigator.pushReplacementNamed(context, 'search');
                   },
                   child: Text(
-                    'Lihat Pesanan',
+                    'Cari Produk',
                     style: whiteTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: medium,
@@ -113,12 +150,8 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
 
     return Scaffold(
       backgroundColor: bgLightColor,
-      body: Column(
-        children: [
-          header(),
-          content(),
-        ],
-      ),
+      appBar: header(),
+      body: productProvider.searchProduct.isEmpty ? noResult() : result(),
     );
   }
 }

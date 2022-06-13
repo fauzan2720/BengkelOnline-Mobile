@@ -96,7 +96,20 @@ class HistoryServiceDetail extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '1. Jenis Servis',
+                      '1. Tanggal',
+                      style: blackTextStyle,
+                    ),
+                    Text(
+                      '${callMechanic.createdAt!.day}-${callMechanic.createdAt!.month}-${callMechanic.createdAt!.year}}',
+                      style: blackTextStyle,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '2. Jenis Servis',
                       style: blackTextStyle,
                     ),
                     Text(
@@ -109,7 +122,7 @@ class HistoryServiceDetail extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '2. Masalah',
+                      '3. Masalah',
                       style: blackTextStyle,
                     ),
                     Text(
@@ -122,7 +135,7 @@ class HistoryServiceDetail extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '3. Metode Pembayaran',
+                      '4. Metode Pembayaran',
                       style: blackTextStyle,
                     ),
                     Text(
@@ -147,7 +160,8 @@ class HistoryServiceDetail extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 40),
+
+          const Spacer(),
 
           // BUTTON BACK
           Container(

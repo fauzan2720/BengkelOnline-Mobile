@@ -1,17 +1,79 @@
+import 'package:bengkel_online/models/location_model.dart';
+import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/providers/cart_provider.dart';
+import 'package:bengkel_online/providers/location_provider.dart';
+import 'package:bengkel_online/providers/transaction_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:bengkel_online/widgets/checkout_card.dart';
+import 'package:bengkel_online/widgets/loading_wdiget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CheckoutPage extends StatelessWidget {
+class CheckoutPage extends StatefulWidget {
   const CheckoutPage({Key? key}) : super(key: key);
 
   @override
+  State<CheckoutPage> createState() => _CheckoutPageState();
+}
+
+class _CheckoutPageState extends State<CheckoutPage> {
+  bool isLoading = false;
+  double shippingPrice = 0;
+
+  @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
     CartProvider cartProvider = Provider.of<CartProvider>(context);
-    // LocationProvider locationProvider = Provider.of<LocationProvider>(context);
-    // LocationModel location = locationProvider.locations[0];
+    LocationProvider locationProvider = Provider.of<LocationProvider>(context);
+    LocationModel location = locationProvider.locations[0];
+    TransactionProvider transactionProvider =
+        Provider.of<TransactionProvider>(context);
+
+    handleShowLocation() async {
+      await Provider.of<LocationProvider>(context, listen: false).getLocations(
+        authProvider.user.token.toString(),
+      );
+      Navigator.pushNamed(context, 'location-transaction');
+    }
+
+    handleCheckout() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (locationProvider.locations.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: primaryColor,
+            content: const Text(
+              'Silahkan pilih lokasi pengiriman',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      } else if (await transactionProvider.checkout(
+        authProvider.user.token!,
+        location.id!,
+        cartProvider.totalPrice(),
+        shippingPrice,
+        cartProvider.totalPrice(),
+        cartProvider.carts,
+      )) {
+        cartProvider.carts = [];
+
+        await Provider.of<TransactionProvider>(context, listen: false)
+            .getHistory(
+          token: authProvider.user.token!,
+        );
+
+        Navigator.pushNamedAndRemoveUntil(
+            context, 'checkout-success', (route) => false);
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
 
     PreferredSizeWidget header() {
       return AppBar(
@@ -23,6 +85,22 @@ class CheckoutPage extends StatelessWidget {
           style: whiteTextStyle.copyWith(
             fontSize: 18,
             fontWeight: medium,
+          ),
+        ),
+      );
+    }
+
+    Widget buttonChangeLocation(
+      String text,
+    ) {
+      return TextButton(
+        onPressed: handleShowLocation,
+        child: Text(
+          text,
+          style: blackTextStyle.copyWith(
+            fontWeight: semibold,
+            fontSize: 14,
+            color: const Color(0xffCA4646),
           ),
         ),
       );
@@ -58,12 +136,20 @@ class CheckoutPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Address Details',
-                    style: blackTextStyle.copyWith(
-                      fontWeight: medium,
-                      fontSize: 16,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Address Details',
+                        style: blackTextStyle.copyWith(
+                          fontWeight: medium,
+                          fontSize: 16,
+                        ),
+                      ),
+                      locationProvider.locations.isEmpty
+                          ? const SizedBox()
+                          : buttonChangeLocation('Ganti Alamat'),
+                    ],
                   ),
                   const SizedBox(height: 12),
                   Row(
@@ -118,14 +204,17 @@ class CheckoutPage extends StatelessWidget {
                               fontSize: 12,
                             ),
                           ),
-                          Text(
-                            'lokasi',
-                            // location.address!,
-                            style: blackTextStyle.copyWith(
-                              fontWeight: medium,
-                              fontSize: 14,
-                            ),
-                          ),
+                          locationProvider.locations.isEmpty
+                              ? buttonChangeLocation('Pilih Alamat')
+                              : Text(
+                                  // 'lokasi',
+                                  location.address!,
+                                  style: blackTextStyle.copyWith(
+                                    fontWeight: medium,
+                                    fontSize: 14,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                         ],
                       ),
                     ],
@@ -205,7 +294,7 @@ class CheckoutPage extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Free',
+                        shippingPrice == 0 ? 'Free' : shippingPrice.toString(),
                         style: blackTextStyle.copyWith(
                           fontWeight: medium,
                           fontSize: 14,
@@ -253,10 +342,7 @@ class CheckoutPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, 'checkout-success', (route) => false);
-                },
+                onPressed: handleCheckout,
                 child: Text(
                   'Checkout Now',
                   style: whiteTextStyle.copyWith(
@@ -274,7 +360,7 @@ class CheckoutPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgLightColor,
       appBar: header(),
-      body: content(),
+      body: isLoading ? const LoadingWidget('Mohon ditunggu') : content(),
     );
   }
 }

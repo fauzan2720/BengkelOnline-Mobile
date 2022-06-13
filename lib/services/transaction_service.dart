@@ -37,10 +37,13 @@ class TransactionService {
     }
   }
 
-    Future<bool> checkout(
+  Future<bool> checkout(
     String token,
+    int locationId,
+    double total,
+    double shippingPrice,
+    double totalPayment,
     List<CartModel> carts,
-    double totalPrice,
   ) async {
     var url = '$baseUrl/transactions';
     var headers = {
@@ -49,7 +52,10 @@ class TransactionService {
     };
     var body = jsonEncode(
       {
-        'address': 'Marsemoon',
+        'location_id': locationId,
+        'total': total,
+        'shipping_price': shippingPrice,
+        'total_payment': totalPayment,
         'items': carts
             .map(
               (cart) => {
@@ -59,8 +65,6 @@ class TransactionService {
             )
             .toList(),
         'status': "PENDING",
-        'total_price': totalPrice,
-        'shipping_price': 0,
       },
     );
 

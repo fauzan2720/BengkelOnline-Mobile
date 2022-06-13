@@ -39,6 +39,18 @@ class _ProductsPageState extends State<ProductsPage> {
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, 'search');
+            },
+            icon: Icon(
+              Icons.search,
+              color: whiteColor,
+            ),
+          ),
+          const SizedBox(width: 10),
+        ],
       );
     }
 

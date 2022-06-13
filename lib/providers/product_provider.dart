@@ -6,10 +6,12 @@ class ProductProvider with ChangeNotifier {
   List<ProductModel> _products = [];
   List<ProductModel> _allProduct = [];
   List<ProductModel> _productoils = [];
+  List<ProductModel> _searchProduct = [];
 
   List<ProductModel> get products => _products;
   List<ProductModel> get allProduct => _allProduct;
   List<ProductModel> get productoils => _productoils;
+  List<ProductModel> get searchProduct => _searchProduct;
 
   set products(List<ProductModel> products) {
     _products = products;
@@ -23,6 +25,11 @@ class ProductProvider with ChangeNotifier {
 
   set productoils(List<ProductModel> productoils) {
     _productoils = productoils;
+    notifyListeners();
+  }
+
+  set searchProduct(List<ProductModel> searchProduct) {
+    _searchProduct = searchProduct;
     notifyListeners();
   }
 
@@ -48,6 +55,18 @@ class ProductProvider with ChangeNotifier {
     try {
       List<ProductModel> productoils = await ProductService().getProductOils();
       _productoils = productoils;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getSearchProduct(
+    String productName,
+  ) async {
+    try {
+      List<ProductModel> searchProduct =
+          await ProductService().getSearchProduct(productName);
+      _searchProduct = searchProduct;
     } catch (e) {
       print(e);
     }

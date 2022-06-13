@@ -80,4 +80,31 @@ class ProductService {
       throw Exception('Gagal Get Products!');
     }
   }
+
+  Future<List<ProductModel>> getSearchProduct(
+    String productName,
+  ) async {
+    var url = '$baseUrl/products?product_name=$productName';
+    var headers = {'Content-Type': 'application/json'};
+
+    var response = await http.get(
+      Uri.parse(url),
+      headers: headers,
+    );
+
+    // print(response.body);
+
+    if (response.statusCode == 200) {
+      List data = jsonDecode(response.body)['data']['data'];
+      List<ProductModel> products = [];
+
+      for (var item in data) {
+        products.add(ProductModel.fromJson(item));
+      }
+
+      return products;
+    } else {
+      throw Exception('Gagal Get Products!');
+    }
+  }
 }

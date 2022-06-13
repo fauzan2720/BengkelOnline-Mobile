@@ -132,8 +132,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     Icons.chevron_left,
                   ),
                 ),
-                const Icon(
-                  Icons.shopping_bag,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'cart');
+                  },
+                  child: const Icon(
+                    Icons.shopping_bag,
+                  ),
                 ),
               ],
             ),
@@ -232,26 +237,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Container(
               margin: const EdgeInsets.all(30),
               width: double.infinity,
-              child: Expanded(
-                child: SizedBox(
-                  height: 54,
-                  child: TextButton(
-                    onPressed: () {
-                      cartProvider.addCart(widget.product);
-                      showSuccessDialog();
-                    },
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      backgroundColor: primaryColor,
+              child: SizedBox(
+                height: 54,
+                child: TextButton(
+                  onPressed: () {
+                    cartProvider.addCart(widget.product);
+                    showSuccessDialog();
+                  },
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Text(
-                      'Masukkan Keranjang',
-                      style: whiteTextStyle.copyWith(
-                        fontWeight: semibold,
-                        fontSize: 16,
-                      ),
+                    backgroundColor: primaryColor,
+                  ),
+                  child: Text(
+                    'Masukkan Keranjang',
+                    style: whiteTextStyle.copyWith(
+                      fontWeight: semibold,
+                      fontSize: 16,
                     ),
                   ),
                 ),

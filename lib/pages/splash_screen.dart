@@ -1,13 +1,37 @@
 import 'package:bengkel_online/providers/product_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SplashScreenPage extends StatelessWidget {
+class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({Key? key}) : super(key: key);
 
   @override
+  State<SplashScreenPage> createState() => _SplashScreenPageState();
+}
+
+class _SplashScreenPageState extends State<SplashScreenPage> {
+  bool isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
+    getInit() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      await Provider.of<ProductProvider>(context, listen: false).getProducts();
+      await Provider.of<ProductProvider>(context, listen: false)
+          .getProductOils();
+
+      Navigator.pushNamed(context, 'login');
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     return Scaffold(
       backgroundColor: primaryColor,
       body: Stack(
@@ -52,49 +76,44 @@ class SplashScreenPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Container(
-                width: 190,
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  gradient: const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xff5879B9),
-                      Color(0xff755E88),
-                    ],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.25),
-                      spreadRadius: 0,
-                      blurRadius: 4,
-                      offset: const Offset(0, 4),
+              isLoading
+                  ? const LoadingButton()
+                  : Container(
+                      width: 190,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        gradient: const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color(0xff5879B9),
+                            Color(0xff755E88),
+                          ],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.25),
+                            spreadRadius: 0,
+                            blurRadius: 4,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      margin: const EdgeInsets.only(top: 16),
+                      child: TextButton(
+                        onPressed: getInit,
+                        child: Text(
+                          'Mulai',
+                          style: poppinsTextStyle.copyWith(
+                            fontWeight: bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-                margin: const EdgeInsets.only(top: 16),
-                child: TextButton(
-                  onPressed: () async {
-                    await Provider.of<ProductProvider>(context, listen: false)
-                        .getProducts();
-                    await Provider.of<ProductProvider>(context, listen: false)
-                        .getProductOils();
-
-                    Navigator.pushNamed(context, 'login');
-                  },
-                  child: Text(
-                    'Mulai',
-                    style: poppinsTextStyle.copyWith(
-                      fontWeight: bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
               const SizedBox(height: 100),
             ],
           ),
