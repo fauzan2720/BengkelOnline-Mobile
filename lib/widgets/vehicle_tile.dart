@@ -178,15 +178,15 @@ class _VehicleTileState extends State<VehicleTile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      '${widget.vehicle.photoUrl}',
-                      width: double.infinity,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  const SizedBox(height: 15),
+                  // ClipRRect(
+                  //   borderRadius: BorderRadius.circular(10),
+                  //   child: Image.network(
+                  //     '${widget.vehicle.photoUrl}',
+                  //     width: double.infinity,
+                  //     fit: BoxFit.fill,
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 15),
 
                   // BUTTONS
                   Row(

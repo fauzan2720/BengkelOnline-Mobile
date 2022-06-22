@@ -33,6 +33,23 @@ class _HistoryPageState extends State<HistoryPage> {
     TransactionProvider transactionProvider =
         Provider.of<TransactionProvider>(context);
 
+    handleRefresh() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      await Provider.of<CallMechanicProvider>(context, listen: false)
+          .getHistoryServices(token: authProvider.user.token);
+      await Provider.of<TransactionProvider>(context, listen: false)
+          .getHistory(token: authProvider.user.token);
+
+      Navigator.pushReplacementNamed(context, 'history');
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     handleCallMechanic() async {
       setState(() {
         isLoading = true;
@@ -82,7 +99,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 context, 'home', (route) => false);
           },
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             color: whiteColor,
           ),
         ),
@@ -94,6 +111,16 @@ class _HistoryPageState extends State<HistoryPage> {
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: handleRefresh,
+            icon: Icon(
+              Icons.refresh,
+              color: whiteColor,
+            ),
+          ),
+          const SizedBox(width: 10),
+        ],
       );
     }
 

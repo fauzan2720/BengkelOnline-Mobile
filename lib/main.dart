@@ -89,8 +89,7 @@ class MyApp extends StatelessWidget {
           'cart': (context) => const CartPage(),
           'checkout': (context) => const CheckoutPage(),
           'checkout-success': (context) => const CheckoutSuccessPage(),
-          'show-history-transactions': (context) =>
-              const ShowHistoryTransactions(),
+          'history': (context) => const ShowHistoryTransactions(),
 
           // halaman mekanik
           'mechanic-home': (context) => const MechanicHomePage(),

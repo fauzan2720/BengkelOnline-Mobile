@@ -75,7 +75,7 @@ class _AddLocationTransactionState extends State<AddLocationTransaction> {
             Navigator.pushReplacementNamed(context, 'location-transaction');
           },
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             color: whiteColor,
           ),
         ),

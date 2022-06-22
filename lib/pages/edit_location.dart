@@ -79,7 +79,7 @@ class _EditLocationState extends State<EditLocation> {
             Navigator.pushReplacementNamed(context, 'location');
           },
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             color: whiteColor,
           ),
         ),

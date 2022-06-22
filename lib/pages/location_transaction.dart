@@ -43,7 +43,8 @@ class LocationTransactionPage extends StatelessWidget {
       body: locationProvider.locations.isEmpty
           ? EmptyWidget('Opps, alamat kosong',
               'Belum ada alamat yang didaftarkan', 'Tambah Alamat', () {
-              Navigator.pushReplacementNamed(context, 'add-location');
+              Navigator.pushReplacementNamed(
+                  context, 'add-location-transaction');
             })
           : ListView(
               children: [
@@ -84,7 +85,8 @@ class LocationTransactionPage extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'add-location');
+                      Navigator.pushReplacementNamed(
+                          context, 'add-location-transaction');
                     },
                     child: Text(
                       'Tambah Lokasi',

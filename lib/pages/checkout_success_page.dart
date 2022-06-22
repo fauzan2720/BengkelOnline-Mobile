@@ -88,7 +88,7 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
                 child: TextButton(
                   onPressed: () {
                     Navigator.pushNamedAndRemoveUntil(
-                        context, 'show-history-transactions', (route) => false);
+                        context, 'history', (route) => false);
                   },
                   child: Text(
                     'Lihat Pesanan',

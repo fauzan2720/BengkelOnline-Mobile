@@ -4,6 +4,7 @@ import 'package:bengkel_online/providers/location_provider.dart';
 import 'package:bengkel_online/providers/product_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:bengkel_online/widgets/cart_card.dart';
+import 'package:bengkel_online/widgets/loading_wdiget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,10 +25,22 @@ class _CartPageState extends State<CartPage> {
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
 
     handleShowLocation() async {
+      setState(() {
+        isLoading = true;
+      });
+
       await Provider.of<LocationProvider>(context, listen: false).getLocations(
         authProvider.user.token.toString(),
       );
-      Navigator.pushNamed(context, 'checkout');
+
+      Future.delayed(
+        const Duration(seconds: 1),
+        () => Navigator.pushNamed(context, 'checkout'),
+      );
+
+      setState(() {
+        isLoading = false;
+      });
     }
 
     handleShowProducts() async {
@@ -169,7 +182,7 @@ class _CartPageState extends State<CartPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Continue to Checkout',
+                      'Lanjutkan ke Checkout',
                       style: whiteTextStyle.copyWith(
                         fontWeight: semibold,
                         fontSize: 16,
@@ -188,7 +201,11 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       backgroundColor: bgLightColor,
       appBar: header(),
-      body: cartProvider.carts.isEmpty ? emptyCart() : content(),
+      body: isLoading
+          ? LoadingWidget('Mohon ditunggu')
+          : cartProvider.carts.isEmpty
+              ? emptyCart()
+              : content(),
       bottomNavigationBar:
           cartProvider.carts.isEmpty ? const SizedBox() : bottomNav(),
     );

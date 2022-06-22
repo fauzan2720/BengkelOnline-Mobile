@@ -27,7 +27,7 @@ class _VehiclePageState extends State<VehiclePage> {
             Navigator.pop(context);
           },
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             color: whiteColor,
           ),
         ),

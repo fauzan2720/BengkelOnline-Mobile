@@ -152,6 +152,7 @@ class _AddVehicleState extends State<AddVehicle> {
       );
     }
 
+    // ignore: unused_element
     Widget image() {
       return ClipRRect(
         borderRadius: BorderRadius.circular(10),
@@ -209,8 +210,8 @@ class _AddVehicleState extends State<AddVehicle> {
             const SizedBox(height: 20),
             formInput('Nomor Plat', numberPlateController, TextInputType.text),
             const SizedBox(height: 40),
-            image(),
-            const SizedBox(height: 40),
+            // image(),
+            // const SizedBox(height: 40),
 
             // BUTOON
             Container(

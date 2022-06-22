@@ -26,6 +26,14 @@ class _HomePageState extends State<HomePage> {
         Provider.of<VehicleProvider>(context, listen: false);
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
 
+    handleSwipeRefresh() async {
+      await Provider.of<ProductProvider>(context, listen: false).getProducts();
+      await Provider.of<ProductProvider>(context, listen: false)
+          .getProductOils();
+
+      Navigator.pushReplacementNamed(context, 'home');
+    }
+
     handleCallMechanic() async {
       setState(() {
         isLoading = true;
@@ -130,153 +138,160 @@ class _HomePageState extends State<HomePage> {
 
     return isLoading
         ? const LoadingWidget('Mohon ditunggu')
-        : Container(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                radius: 20,
-                colors: [
-                  primaryColor,
-                  bgLightColor,
-                ],
-              ),
-            ),
-            child: ListView(
-              children: [
-                // HEADER
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Hello, ${user.fullname}',
-                              style: whiteTextStyle.copyWith(
-                                fontWeight: medium,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              '${user.email}',
-                              style: whiteTextStyle.copyWith(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Image.network(
-                        'https://ui-avatars.com/api/?name=${user.fullname}&color=7F9CF5&background=random&rounded=true&size=60',
-                      ),
-                    ],
-                  ),
+        : RefreshIndicator(
+            onRefresh: handleSwipeRefresh,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  radius: 20,
+                  colors: [
+                    primaryColor,
+                    bgLightColor,
+                  ],
                 ),
-                const SizedBox(height: 70),
-
-                // CONTENT
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 40,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(30),
-                    ),
-                    color: bgLightColor,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // PRODUCT CARD
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Text(
-                          'Rekomendasi untuk anda',
-                          style: blackTextStyle.copyWith(
-                            fontWeight: semibold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30, right: 30),
-                          child: Row(
+              ),
+              child: ListView(
+                children: [
+                  // HEADER
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: productProvider.products
-                                    .map(
-                                      (e) => ProductCard(e),
-                                    )
-                                    .toList(),
-                              ),
-                              const SizedBox(width: 18),
-                              Center(
-                                child: TextButton(
-                                  onPressed: handleShowProducts,
-                                  child: Text(
-                                    'lihat semua',
-                                    style: blackTextStyle,
-                                  ),
+                              Text(
+                                'Hello, ${user.fullname}',
+                                style: whiteTextStyle.copyWith(
+                                  fontWeight: medium,
+                                  fontSize: 20,
                                 ),
-                              )
+                              ),
+                              Text(
+                                '${user.email}',
+                                style: whiteTextStyle.copyWith(
+                                  fontSize: 16,
+                                ),
+                              ),
                             ],
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 22),
-
-                      // IMAGE PROMOSI
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.asset(
-                            'assets/img/img_promosi.png',
-                            width: double.infinity,
-                          ),
+                        Image.network(
+                          'https://ui-avatars.com/api/?name=${user.fullname}&color=7F9CF5&background=random&rounded=true&size=60',
                         ),
-                      ),
-                      const SizedBox(height: 30),
-
-                      // KENDARAAN MOGOK?
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: Text(
-                          'Kendaraan Mogok?',
-                          style: blackTextStyle.copyWith(
-                            fontWeight: semibold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      fastFeatures(
-                        'http://ae01.alicdn.com/kf/H36b10080f4bc4e4ea59cbec53b7522d5K.jpg',
-                        'Panggil Mekanik jika KM anda mencapai 16.058KM',
-                        'Panggil Sekarang',
-                        handleCallMechanic,
-                      ),
-                      fastFeatures(
-                        'https://www.astramotor-md.co.id/wp-content/uploads/2020/05/WhatsApp-Image-2020-05-13-at-11.39.41-2.jpeg',
-                        'Mogok dan susah cari bengkel? Panggil Mekanik aja',
-                        'Panggil Sekarang',
-                        handleCallMechanic,
-                      ),
-                      fastFeatures(
-                        'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_640/v1608290419/pw0nfekk2ssnxurv85pz.jpg',
-                        'Susah cari sparepart? Cari aja di disini',
-                        'Cari Sparepart',
-                        handleShowProducts,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 70),
+
+                  // CONTENT
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 40,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(30),
+                      ),
+                      color: bgLightColor,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // PRODUCT CARD
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Text(
+                            'Rekomendasi untuk anda',
+                            style: blackTextStyle.copyWith(
+                              fontWeight: semibold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 30, right: 30),
+                            child: Row(
+                              children: [
+                                Row(
+                                  children: productProvider.products
+                                      .map(
+                                        (e) => Hero(
+                                          tag: "product",
+                                          transitionOnUserGestures: true,
+                                          child: ProductCard(e),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                                const SizedBox(width: 18),
+                                Center(
+                                  child: TextButton(
+                                    onPressed: handleShowProducts,
+                                    child: Text(
+                                      'lihat semua',
+                                      style: blackTextStyle,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 22),
+
+                        // IMAGE PROMOSI
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(
+                              'assets/img/img_promosi.png',
+                              width: double.infinity,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+
+                        // KENDARAAN MOGOK?
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Text(
+                            'Kendaraan Mogok?',
+                            style: blackTextStyle.copyWith(
+                              fontWeight: semibold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        fastFeatures(
+                          'http://ae01.alicdn.com/kf/H36b10080f4bc4e4ea59cbec53b7522d5K.jpg',
+                          'Panggil Mekanik jika KM anda mencapai 16.058KM',
+                          'Panggil Sekarang',
+                          handleCallMechanic,
+                        ),
+                        fastFeatures(
+                          'https://www.astramotor-md.co.id/wp-content/uploads/2020/05/WhatsApp-Image-2020-05-13-at-11.39.41-2.jpeg',
+                          'Mogok dan susah cari bengkel? Panggil Mekanik aja',
+                          'Panggil Sekarang',
+                          handleCallMechanic,
+                        ),
+                        fastFeatures(
+                          'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_640/v1608290419/pw0nfekk2ssnxurv85pz.jpg',
+                          'Susah cari sparepart? Cari aja di disini',
+                          'Cari Sparepart',
+                          handleShowProducts,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
   }

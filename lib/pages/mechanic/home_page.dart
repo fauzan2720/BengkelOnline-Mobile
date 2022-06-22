@@ -1,6 +1,4 @@
-import 'package:bengkel_online/models/call_mechanic_model.dart';
 import 'package:bengkel_online/providers/auth_provider.dart';
-import 'package:bengkel_online/providers/call_mechanic_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,9 +14,9 @@ class _MechanicHomePageState extends State<MechanicHomePage> {
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    CallMechanicProvider callMechanicProvider =
-        Provider.of<CallMechanicProvider>(context);
-    CallMechanicModel callMechanic = callMechanicProvider.historyServices[0];
+    // CallMechanicProvider callMechanicProvider =
+    //     Provider.of<CallMechanicProvider>(context);
+    // CallMechanicModel callMechanic = callMechanicProvider.historyServices[0];
 
     handleLogout() async {
       AlertDialog alertDialog = AlertDialog(
@@ -100,14 +98,15 @@ class _MechanicHomePageState extends State<MechanicHomePage> {
             child: Row(
               children: [
                 Image.network(
-                  'https://ui-avatars.com/api/?name=${callMechanic.mechanic}&color=7F9CF5&background=EBF4FF&rounded=true&size=64',
+                  'https://ui-avatars.com/api/?name=Nama+Mekanik&color=7F9CF5&background=EBF4FF&rounded=true&size=64',
                 ),
                 const SizedBox(width: 20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      callMechanic.mechanic!,
+                      'Fauzan zan',
+                      // callMechanic.mechanic!,
                       style: blackTextStyle.copyWith(
                         fontWeight: semibold,
                         fontSize: 16,
@@ -207,7 +206,8 @@ class _MechanicHomePageState extends State<MechanicHomePage> {
                       style: blackTextStyle,
                     ),
                     Text(
-                      callMechanic.typeOfWork!,
+                      'Servis Komplit',
+                      // callMechanic.typeOfWork!,
                       style: blackTextStyle,
                     ),
                   ],
@@ -220,7 +220,8 @@ class _MechanicHomePageState extends State<MechanicHomePage> {
                       style: blackTextStyle,
                     ),
                     Text(
-                      callMechanic.detailProblem!,
+                      'Tiba2 mati',
+                      // callMechanic.detailProblem!,
                       style: blackTextStyle,
                     ),
                   ],
@@ -233,7 +234,8 @@ class _MechanicHomePageState extends State<MechanicHomePage> {
                       style: blackTextStyle,
                     ),
                     Text(
-                      callMechanic.paymentMethod!,
+                      'TUNAI',
+                      // callMechanic.paymentMethod!,
                       style: blackTextStyle,
                     ),
                   ],
@@ -246,7 +248,8 @@ class _MechanicHomePageState extends State<MechanicHomePage> {
                       style: blackTextStyle,
                     ),
                     Text(
-                      callMechanic.totalPayment!,
+                      'Rp100000',
+                      // callMechanic.totalPayment!,
                       style: blackTextStyle,
                     ),
                   ],

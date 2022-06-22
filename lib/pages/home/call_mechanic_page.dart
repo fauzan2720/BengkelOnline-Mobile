@@ -92,8 +92,7 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
 
           Future.delayed(
             const Duration(seconds: 2),
-            () => Navigator.pushReplacementNamed(
-                context, 'show-history-transactions'),
+            () => Navigator.pushReplacementNamed(context, 'history'),
           );
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -124,8 +123,7 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
 
         Future.delayed(
           const Duration(seconds: 2),
-          () => Navigator.pushReplacementNamed(
-              context, 'show-history-transactions'),
+          () => Navigator.pushReplacementNamed(context, 'history'),
         );
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -247,84 +245,50 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Data Kendaraan',
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Data Kendaraan',
+                          style: blackTextStyle.copyWith(
+                            fontWeight: semibold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        Text(
+                          vehicle.vehicleName.toString(),
+                          style: blackTextStyle.copyWith(
+                            fontWeight: medium,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          vehicle.numberPlate.toString(),
+                          style: blackTextStyle.copyWith(
+                            fontWeight: medium,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: TextButton(
+                      onPressed: handleShowVehicle,
+                      child: Text(
+                        'Ganti Kendaraan',
                         style: blackTextStyle.copyWith(
                           fontWeight: semibold,
-                          fontSize: 16,
+                          fontSize: 14,
+                          color: const Color(0xffCA4646),
                         ),
                       ),
-                      const SizedBox(height: 14),
-                      Text(
-                        vehicle.vehicleName.toString(),
-                        style: blackTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        vehicle.numberPlate.toString(),
-                        style: blackTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          vehicle.photoUrl.toString(),
-                          width: 100,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-
-                      // BUTTON
-                      Container(
-                        width: 100,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                          gradient: const LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color(0xffF30F0F),
-                              Color(0xffD3717C),
-                            ],
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              spreadRadius: 0,
-                              blurRadius: 4,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        margin: const EdgeInsets.only(top: 16),
-                        child: TextButton(
-                          onPressed: handleShowVehicle,
-                          child: Text(
-                            'Edit',
-                            style: poppinsTextStyle.copyWith(
-                              fontWeight: bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -405,7 +369,7 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
 
             // JENIS PEKERJAAN
             Text(
-              'Jenis Pekerjaan',
+              'Jenis Servis',
               style: blackTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: bold,
@@ -480,6 +444,7 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
             ),
             const SizedBox(height: 10),
             TextFormField(
+              maxLines: 5,
               controller: problemController,
               decoration: InputDecoration(
                 helperMaxLines: 10,
@@ -512,8 +477,7 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
               ),
               child: DropdownButton<String>(
                 value: _selectedPayment,
-                items: <String>['Tunai', 'Indomart', 'Alfamart', 'GoPay', 'OVO']
-                    .map((String value) {
+                items: <String>['Tunai'].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),

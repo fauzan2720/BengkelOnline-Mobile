@@ -1,8 +1,8 @@
 import 'package:bengkel_online/pages/home/home_page.dart';
 import 'package:bengkel_online/pages/home/profile_page.dart';
-import 'package:bengkel_online/pages/home/history_page.dart';
 import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/providers/call_mechanic_provider.dart';
+import 'package:bengkel_online/providers/transaction_provider.dart';
 import 'package:bengkel_online/providers/vehicle_provider.dart';
 import 'package:bengkel_online/util/themes.dart';
 import 'package:bengkel_online/widgets/loading_wdiget.dart';
@@ -27,6 +27,8 @@ class _MainPageState extends State<MainPage> {
         Provider.of<VehicleProvider>(context, listen: false);
     CallMechanicProvider callMechanicProvider =
         Provider.of<CallMechanicProvider>(context);
+    TransactionProvider transactionProvider =
+        Provider.of<TransactionProvider>(context);
 
     getInit() async {
       await Provider.of<CallMechanicProvider>(context, listen: false)
@@ -80,6 +82,26 @@ class _MainPageState extends State<MainPage> {
       });
 
       Navigator.pushNamed(context, 'cart');
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
+    handleHistory() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (callMechanicProvider.historyServices.isEmpty ||
+          transactionProvider.history.isEmpty) {
+        await Provider.of<CallMechanicProvider>(context, listen: false)
+            .getHistoryServices(token: authProvider.user.token);
+        await Provider.of<TransactionProvider>(context, listen: false)
+            .getHistory(token: authProvider.user.token);
+      }
+
+      Navigator.pushNamed(context, 'history');
 
       setState(() {
         isLoading = false;
@@ -182,14 +204,17 @@ class _MainPageState extends State<MainPage> {
                   label: '',
                 ),
                 BottomNavigationBarItem(
-                  icon: Container(
-                    margin: const EdgeInsets.only(
-                      top: 15,
-                    ),
-                    child: Icon(
-                      Icons.list_alt,
-                      size: 30,
-                      color: currentIndex == 3 ? greyColor : whiteColor,
+                  icon: GestureDetector(
+                    onTap: handleHistory,
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: 15,
+                      ),
+                      child: Icon(
+                        Icons.list_alt,
+                        size: 30,
+                        color: currentIndex == 3 ? greyColor : whiteColor,
+                      ),
                     ),
                   ),
                   label: '',
@@ -218,8 +243,8 @@ class _MainPageState extends State<MainPage> {
       switch (currentIndex) {
         case 0:
           return const HomePage();
-        case 3:
-          return const HistoryPage();
+        // case 3:
+        //   return const HistoryPage();
         case 4:
           return const ProfilePage();
         default:

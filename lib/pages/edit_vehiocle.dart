@@ -80,7 +80,7 @@ class _EditVehicleState extends State<EditVehicle> {
             Navigator.pushReplacementNamed(context, 'vehicle');
           },
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             color: whiteColor,
           ),
         ),
@@ -154,10 +154,10 @@ class _EditVehicleState extends State<EditVehicle> {
             const SizedBox(height: 20),
             formInput('Nomor Plat', numberPlateController, TextInputType.text),
             const SizedBox(height: 40),
-            ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset('assets/img/img_default.png')),
-            const SizedBox(height: 40),
+            // ClipRRect(
+            //     borderRadius: BorderRadius.circular(10),
+            //     child: Image.asset('assets/img/img_default.png')),
+            // const SizedBox(height: 40),
 
             // BUTOON
             Container(

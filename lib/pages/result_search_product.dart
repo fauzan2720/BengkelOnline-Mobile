@@ -18,6 +18,10 @@ class _ResultSearchProductsPageState extends State<ResultSearchProductsPage> {
   Widget build(BuildContext context) {
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
 
+    handleRefresh() async {
+      Navigator.pop(context);
+    }
+
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
@@ -28,7 +32,7 @@ class _ResultSearchProductsPageState extends State<ResultSearchProductsPage> {
             Navigator.pop(context);
           },
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             color: whiteColor,
           ),
         ),
@@ -41,6 +45,14 @@ class _ResultSearchProductsPageState extends State<ResultSearchProductsPage> {
         ),
         centerTitle: true,
         actions: [
+          IconButton(
+            onPressed: handleRefresh,
+            icon: Icon(
+              Icons.refresh,
+              color: whiteColor,
+            ),
+          ),
+          const SizedBox(width: 10),
           IconButton(
             onPressed: () {
               Navigator.pushReplacementNamed(context, 'search');

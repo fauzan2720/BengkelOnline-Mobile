@@ -80,7 +80,7 @@ class _EditLocationTransactionState extends State<EditLocationTransaction> {
             Navigator.pushReplacementNamed(context, 'location');
           },
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             color: whiteColor,
           ),
         ),

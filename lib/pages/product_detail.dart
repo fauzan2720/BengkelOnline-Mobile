@@ -143,24 +143,27 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ],
             ),
           ),
-          CarouselSlider(
-            items: widget.product.galleries!
-                .map(
-                  (image) => Image.network(
-                    image.url!,
-                    width: MediaQuery.of(context).size.width,
-                    height: 300,
-                    fit: BoxFit.contain,
-                  ),
-                )
-                .toList(),
-            options: CarouselOptions(
-                initialPage: 0,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                }),
+          Hero(
+            tag: "product",
+            child: CarouselSlider(
+              items: widget.product.galleries!
+                  .map(
+                    (image) => Image.network(
+                      image.url!,
+                      width: MediaQuery.of(context).size.width,
+                      height: 300,
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                  .toList(),
+              options: CarouselOptions(
+                  initialPage: 0,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      currentIndex = index;
+                    });
+                  }),
+            ),
           ),
           const SizedBox(height: 20),
           Row(

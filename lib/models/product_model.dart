@@ -5,7 +5,7 @@ class ProductModel {
   String? productName;
   String? productCategory;
   double? price;
-  String? trends;
+  String? stock;
   DateTime? createdAt;
   DateTime? updatedAt;
   late List<GalleryModel>? galleries;
@@ -15,7 +15,7 @@ class ProductModel {
     this.productName,
     this.productCategory,
     this.price,
-    this.trends,
+    this.stock,
     this.createdAt,
     this.updatedAt,
     this.galleries,
@@ -26,7 +26,7 @@ class ProductModel {
     productName = json['product_name'];
     productCategory = json['product_category'];
     price = double.parse(json['price'].toString());
-    trends = json['trends'];
+    stock = json['stock'];
     galleries = json['galleries']
         .map<GalleryModel>((gallery) => GalleryModel.fromJson(gallery))
         .toList();
@@ -40,7 +40,7 @@ class ProductModel {
       'product_name': productName,
       'product_category': productCategory,
       'price': price,
-      'trends': trends,
+      'stock': stock,
       'galleries': galleries?.map((gallery) => gallery.toJson()).toList(),
       'created_at': createdAt.toString(),
       'updated_at': updatedAt.toString(),

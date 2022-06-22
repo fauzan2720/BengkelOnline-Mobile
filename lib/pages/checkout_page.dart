@@ -344,7 +344,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               child: TextButton(
                 onPressed: handleCheckout,
                 child: Text(
-                  'Checkout Now',
+                  'Checkout Sekarang',
                   style: whiteTextStyle.copyWith(
                     fontWeight: semibold,
                     fontSize: 16,

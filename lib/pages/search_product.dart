@@ -57,7 +57,7 @@ class _SearchProductState extends State<SearchProduct> {
                 Navigator.pop(context);
               },
               child: Icon(
-                Icons.keyboard_arrow_left,
+                Icons.arrow_back,
                 color: iconColor,
               ),
             ),
