@@ -100,7 +100,7 @@ class HistoryServiceDetail extends StatelessWidget {
                       style: blackTextStyle,
                     ),
                     Text(
-                      '${callMechanic.createdAt!.day}-${callMechanic.createdAt!.month}-${callMechanic.createdAt!.year}}',
+                      '${callMechanic.createdAt!.day}-${callMechanic.createdAt!.month}-${callMechanic.createdAt!.year}',
                       style: blackTextStyle,
                     ),
                   ],

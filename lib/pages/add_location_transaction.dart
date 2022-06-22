@@ -68,7 +68,6 @@ class _AddLocationTransactionState extends State<AddLocationTransaction> {
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
-        automaticallyImplyLeading: false,
         elevation: 0,
         title: Text(
           'Buat Alamat Rumah Baru',
@@ -113,16 +112,14 @@ class _AddLocationTransactionState extends State<AddLocationTransaction> {
                 ),
               ],
             ),
-            child: Expanded(
-              child: TextFormField(
-                keyboardType: keyboardType,
-                controller: controller,
-                style: poppinsTextStyle,
-                decoration: InputDecoration(
-                  hintText: text,
-                  hintStyle: placeholderTextStyle,
-                  border: InputBorder.none,
-                ),
+            child: TextFormField(
+              keyboardType: keyboardType,
+              controller: controller,
+              style: poppinsTextStyle,
+              decoration: InputDecoration(
+                hintText: text,
+                hintStyle: placeholderTextStyle,
+                border: InputBorder.none,
               ),
             ),
           ),

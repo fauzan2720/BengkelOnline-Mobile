@@ -75,7 +75,7 @@ class _ResultSearchProductsPageState extends State<ResultSearchProductsPage> {
           crossAxisCount: 2,
           children: productProvider.searchProduct
               .map(
-                (e) => ProductCard(e),
+                (e) => Hero(tag: 'product', child: ProductCard(e)),
               )
               .toList(),
         ),

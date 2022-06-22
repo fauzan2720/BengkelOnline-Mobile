@@ -79,7 +79,7 @@ class _ProductsPageState extends State<ProductsPage> {
           crossAxisCount: 2,
           children: productProvider.allProduct
               .map(
-                (e) => ProductCard(e),
+                (e) => Hero(tag: 'product', child: ProductCard(e)),
               )
               .toList(),
         ),
