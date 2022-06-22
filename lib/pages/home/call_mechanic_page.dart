@@ -560,8 +560,7 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
               margin: const EdgeInsets.only(top: 16),
               child: TextButton(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, 'home', (route) => false);
+                  Navigator.pushReplacementNamed(context, 'home');
                 },
                 child: Text(
                   'Batalkan',

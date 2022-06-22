@@ -15,17 +15,7 @@ class LocationPage extends StatelessWidget {
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
-        automaticallyImplyLeading: false,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: whiteColor,
-          ),
-        ),
         title: Text(
           'Pilih Lokasi Sekarang',
           style: whiteTextStyle.copyWith(
@@ -43,7 +33,7 @@ class LocationPage extends StatelessWidget {
       body: locationProvider.locations.isEmpty
           ? EmptyWidget('Opps, alamat kosong',
               'Belum ada alamat yang didaftarkan', 'Tambah Alamat', () {
-              Navigator.pushReplacementNamed(context, 'add-location');
+              Navigator.pushNamed(context, 'add-location');
             })
           : ListView(
               children: [
@@ -84,7 +74,7 @@ class LocationPage extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, 'add-location');
+                      Navigator.pushNamed(context, 'add-location');
                     },
                     child: Text(
                       'Tambah Lokasi',

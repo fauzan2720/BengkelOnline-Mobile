@@ -22,6 +22,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
+    // saveLoginStatus() async {
+    //   SharedPreferences pref = await SharedPreferences.getInstance();
+    //   pref.setBool("isLogedIn", true);
+    // }
+
     handleLogin() async {
       setState(() {
         isLoading = true;
@@ -31,7 +36,10 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       )) {
-        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+        // saveLoginStatus();
+        // print(saveLoginStatus().then((value) => value));
+
+        Navigator.pushReplacementNamed(context, 'home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -233,8 +241,7 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(width: 5),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, 'registrasi', (route) => false);
+              Navigator.pushReplacementNamed(context, 'registrasi');
             },
             child: Text(
               'Daftar yuk',

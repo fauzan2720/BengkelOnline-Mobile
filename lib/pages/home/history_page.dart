@@ -95,8 +95,7 @@ class _HistoryPageState extends State<HistoryPage> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(
-                context, 'home', (route) => false);
+            Navigator.pushReplacementNamed(context, 'home');
           },
           icon: Icon(
             Icons.arrow_back,

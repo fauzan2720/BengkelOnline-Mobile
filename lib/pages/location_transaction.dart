@@ -15,17 +15,7 @@ class LocationTransactionPage extends StatelessWidget {
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
-        automaticallyImplyLeading: false,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: whiteColor,
-          ),
-        ),
         title: Text(
           'Pilih Lokasi Sekarang',
           style: whiteTextStyle.copyWith(
@@ -85,8 +75,7 @@ class LocationTransactionPage extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, 'add-location-transaction');
+                      Navigator.pushNamed(context, 'add-location-transaction');
                     },
                     child: Text(
                       'Tambah Lokasi',

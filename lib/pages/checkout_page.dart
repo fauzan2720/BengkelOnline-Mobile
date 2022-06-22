@@ -66,8 +66,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           token: authProvider.user.token!,
         );
 
-        Navigator.pushNamedAndRemoveUntil(
-            context, 'checkout-success', (route) => false);
+        Navigator.pushReplacementNamed(context, 'checkout-success');
       }
 
       setState(() {

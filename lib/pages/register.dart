@@ -21,7 +21,8 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = TextEditingController(text: '');
   // TextEditingController pinController = TextEditingController(text: '');
   TextEditingController passwordController = TextEditingController(text: '');
-  TextEditingController confirmPasswordController = TextEditingController(text: '');
+  TextEditingController confirmPasswordController =
+      TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
@@ -47,16 +48,16 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         );
-      // } else if (pinController.text.length != 6) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(
-      //       backgroundColor: primaryColor,
-      //       content: const Text(
-      //         'Buat pin dengan 6 digit',
-      //         textAlign: TextAlign.center,
-      //       ),
-      //     ),
-      //   );
+        // } else if (pinController.text.length != 6) {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(
+        //       backgroundColor: primaryColor,
+        //       content: const Text(
+        //         'Buat pin dengan 6 digit',
+        //         textAlign: TextAlign.center,
+        //       ),
+        //     ),
+        //   );
       } else if (passwordController.text != confirmPasswordController.text) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -84,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
         // pin: pinController.text,
         password: passwordController.text,
       )) {
-        Navigator.pushNamed(context, 'home');
+        Navigator.pushReplacementNamed(context, 'home');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: greenColor,
@@ -330,8 +331,7 @@ class _RegisterPageState extends State<RegisterPage> {
           const SizedBox(width: 5),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, 'login', (route) => false);
+              Navigator.pushReplacementNamed(context, 'login');
             },
             child: Text(
               'Login yuk',
@@ -393,8 +393,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 formInput(Icons.lock_outline, 'Password', passwordController,
                     showPassword, TextInputType.text),
                 const SizedBox(height: 30),
-                formConfirmPassword(Icons.lock_outline, 'Konfirmasi Password', confirmPasswordController,
-                    showPassword2, TextInputType.text),
+                formConfirmPassword(
+                    Icons.lock_outline,
+                    'Konfirmasi Password',
+                    confirmPasswordController,
+                    showPassword2,
+                    TextInputType.text),
                 const SizedBox(height: 62),
                 isLoading ? const LoadingButton() : buttonRegistrasi(),
                 const SizedBox(height: 30),

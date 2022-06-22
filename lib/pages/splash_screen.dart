@@ -13,9 +13,15 @@ class SplashScreenPage extends StatefulWidget {
 
 class _SplashScreenPageState extends State<SplashScreenPage> {
   bool isLoading = false;
+  bool isLogedIn = false;
 
   @override
   Widget build(BuildContext context) {
+    // Future<bool> getLoginStatus() async {
+    //   SharedPreferences pref = await SharedPreferences.getInstance();
+    //   return pref.getBool("isLogedIn") ?? false;
+    // }
+
     getInit() async {
       setState(() {
         isLoading = true;
@@ -24,6 +30,19 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
       await Provider.of<ProductProvider>(context, listen: false).getProducts();
       await Provider.of<ProductProvider>(context, listen: false)
           .getProductOils();
+
+      // getLoginStatus().then((status) {
+      //   isLogedIn = status;
+      //   setState(() {});
+      // });
+
+      // print(isLogedIn);
+
+      // if (isLogedIn == true) {
+      //   Navigator.pushReplacementNamed(context, 'home');
+      // } else {
+      //   Navigator.pushNamed(context, 'login');
+      // }
 
       Navigator.pushNamed(context, 'login');
 

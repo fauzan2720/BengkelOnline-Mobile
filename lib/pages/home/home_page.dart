@@ -223,7 +223,6 @@ class _HomePageState extends State<HomePage> {
                                       .map(
                                         (e) => Hero(
                                           tag: "product",
-                                          transitionOnUserGestures: true,
                                           child: ProductCard(e),
                                         ),
                                       )

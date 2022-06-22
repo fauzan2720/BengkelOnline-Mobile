@@ -83,17 +83,7 @@ class _AddVehicleState extends State<AddVehicle> {
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
-        automaticallyImplyLeading: false,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, 'vehicle');
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: whiteColor,
-          ),
-        ),
         title: Text(
           'Buat Kendaraan Baru',
           style: whiteTextStyle.copyWith(

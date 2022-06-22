@@ -20,17 +20,7 @@ class _VehiclePageState extends State<VehiclePage> {
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
-        automaticallyImplyLeading: false,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: whiteColor,
-          ),
-        ),
         title: Text(
           'Pilih Kendaraan',
           style: whiteTextStyle.copyWith(
@@ -48,7 +38,7 @@ class _VehiclePageState extends State<VehiclePage> {
       body: vehicleProvider.vehicles.isEmpty
           ? EmptyWidget('Opps, kendaaraan kosong',
               'Belum ada kendaraan yang didaftarkan', 'Tambah Kendaraan', () {
-              Navigator.pushReplacementNamed(context, 'add-vehicle');
+              Navigator.pushNamed(context, 'add-vehicle');
             })
           : ListView(
               children: [

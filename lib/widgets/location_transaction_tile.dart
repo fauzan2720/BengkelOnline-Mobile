@@ -27,7 +27,8 @@ class _LocationTransactionTileState extends State<LocationTransactionTile> {
         authProvider.user.token.toString(),
         widget.location.id.toString(),
       );
-      Navigator.pushNamedAndRemoveUntil(context, 'checkout', (route) => false);
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, 'checkout');
     }
 
     handleButtonUpdate() {

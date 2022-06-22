@@ -46,6 +46,7 @@ class _EditLocationTransactionState extends State<EditLocationTransaction> {
             .getLocations(
           authProvider.user.token.toString(),
         );
+        Navigator.pop(context);
         Navigator.pushReplacementNamed(context, 'location-transaction');
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -73,24 +74,7 @@ class _EditLocationTransactionState extends State<EditLocationTransaction> {
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
-        automaticallyImplyLeading: false,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, 'location');
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: whiteColor,
-          ),
-        ),
-        title: Text(
-          'Perbarui Alamat Rumah',
-          style: whiteTextStyle.copyWith(
-            fontWeight: medium,
-            fontSize: 18,
-          ),
-        ),
         centerTitle: true,
       );
     }

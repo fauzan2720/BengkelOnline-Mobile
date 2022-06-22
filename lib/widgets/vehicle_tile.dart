@@ -35,7 +35,12 @@ class _VehicleTileState extends State<VehicleTile> {
         );
         Navigator.pushNamed(context, 'location');
       } else {
-        Navigator.pushNamedAndRemoveUntil(context, 'call', (route) => false);
+        await Provider.of<VehicleProvider>(context, listen: false)
+            .resultVehicles(
+          authProvider.user.token.toString(),
+          widget.vehicle.id.toString(),
+        );
+        Navigator.pushReplacementNamed(context, 'call');
       }
     }
 

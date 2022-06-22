@@ -46,6 +46,7 @@ class _EditVehicleState extends State<EditVehicle> {
         await Provider.of<VehicleProvider>(context, listen: false).getVehicles(
           authProvider.user.token.toString(),
         );
+        Navigator.pop(context);
         Navigator.pushReplacementNamed(context, 'vehicle');
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -73,17 +74,7 @@ class _EditVehicleState extends State<EditVehicle> {
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: primaryColor,
-        automaticallyImplyLeading: false,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, 'vehicle');
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: whiteColor,
-          ),
-        ),
         title: Text(
           'Perbarui Kendaraan',
           style: whiteTextStyle.copyWith(

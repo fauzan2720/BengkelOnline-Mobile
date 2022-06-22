@@ -63,8 +63,7 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
                 height: 44,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, 'home', (route) => false);
+                    Navigator.pushReplacementNamed(context, 'home');
                   },
                   child: Text(
                     'Oke',
@@ -87,8 +86,7 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
                 height: 44,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, 'history', (route) => false);
+                    Navigator.pushReplacementNamed(context, 'history');
                   },
                   child: Text(
                     'Lihat Pesanan',

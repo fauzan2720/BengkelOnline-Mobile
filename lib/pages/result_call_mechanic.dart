@@ -27,8 +27,7 @@ class CallMechanic extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () => Navigator.pushNamedAndRemoveUntil(
-                    context, 'home', (route) => false),
+                onTap: () => Navigator.pushReplacementNamed(context, 'home'),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 30,
@@ -209,8 +208,7 @@ class CallMechanic extends StatelessWidget {
             ),
             child: TextButton(
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, 'home', (route) => false);
+                Navigator.pushReplacementNamed(context, 'home');
               },
               child: Text(
                 'Kembali ke Beranda',

@@ -12,6 +12,18 @@ class ProfilePage extends StatelessWidget {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModel user = authProvider.user;
 
+    maintanance() {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: greenColor,
+          content: const Text(
+            'Fitur dalam tahap pengembangan',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
     handleLogout() async {
       AlertDialog alertDialog = AlertDialog(
         title: const Text('Warning!!'),
@@ -151,14 +163,14 @@ class ProfilePage extends StatelessWidget {
               ),
               menuItem(
                 () {
-                  Navigator.pushReplacementNamed(context, 'edit-profile');
+                  Navigator.pushNamed(context, 'edit-profile');
                 },
                 'Perbarui Profil',
                 blackColor,
               ),
               menuItem(
                 () {
-                  Navigator.pushReplacementNamed(context, 'edit-password');
+                  Navigator.pushNamed(context, 'edit-password');
                 },
                 'Ubah Kata Sandi',
                 blackColor,
@@ -172,16 +184,12 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               menuItem(
-                () {
-                  // Navigator.pushReplacementNamed(context, '');
-                },
+                maintanance,
                 'FAQ',
                 blackColor,
               ),
               menuItem(
-                () {
-                  // Navigator.pushReplacementNamed(context, '');
-                },
+                maintanance,
                 'Beri Penilaian Aplikasi',
                 blackColor,
               ),

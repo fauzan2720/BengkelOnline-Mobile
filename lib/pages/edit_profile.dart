@@ -25,8 +25,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     //     TextEditingController(text: user.pinNumber);
 
     handleUpdate() async {
-      if (nameController.text.isEmpty ||
-          phoneController.text.isEmpty) {
+      if (nameController.text.isEmpty || phoneController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: primaryColor,
@@ -72,7 +71,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.pushReplacementNamed(context, 'home');
+            Navigator.pop(context);
           },
           icon: Icon(
             Icons.close,

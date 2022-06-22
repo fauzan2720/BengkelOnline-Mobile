@@ -70,15 +70,6 @@ class _AddLocationTransactionState extends State<AddLocationTransaction> {
         backgroundColor: primaryColor,
         automaticallyImplyLeading: false,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, 'location-transaction');
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: whiteColor,
-          ),
-        ),
         title: Text(
           'Buat Alamat Rumah Baru',
           style: whiteTextStyle.copyWith(

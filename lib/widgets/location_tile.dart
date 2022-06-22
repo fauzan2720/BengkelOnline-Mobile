@@ -26,7 +26,7 @@ class _LocationTileState extends State<LocationTile> {
         authProvider.user.token.toString(),
         widget.location.id.toString(),
       );
-      Navigator.pushNamedAndRemoveUntil(context, 'call', (route) => false);
+      Navigator.pushReplacementNamed(context, 'call');
     }
 
     handleButtonUpdate() {
