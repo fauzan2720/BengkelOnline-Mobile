@@ -1,8 +1,9 @@
 import 'package:bengkel_online/providers/auth_provider.dart';
-import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/themes/themes.dart';
 import 'package:bengkel_online/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -18,14 +19,15 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController(text: '');
   TextEditingController passwordController = TextEditingController(text: '');
 
+  void saveLoginStatus() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("email", emailController.text);
+    pref.setString("password", passwordController.text);
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
-
-    // saveLoginStatus() async {
-    //   SharedPreferences pref = await SharedPreferences.getInstance();
-    //   pref.setBool("isLogedIn", true);
-    // }
 
     handleLogin() async {
       setState(() {
@@ -36,8 +38,7 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       )) {
-        // saveLoginStatus();
-        // print(saveLoginStatus().then((value) => value));
+        saveLoginStatus();
 
         Navigator.pushReplacementNamed(context, 'home');
       } else {
@@ -74,8 +75,11 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.white,
                 shape: CircleBorder(),
               ),
-              child: Image.asset(
-                'assets/img/logo.png',
+              child: Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Image.asset(
+                  'assets/img/logo.png',
+                ),
               ),
             ),
           ),
@@ -128,63 +132,79 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     Widget passwordInput() {
-      return Container(
-        height: 50,
-        margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, 4),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 50,
+            margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
             ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.lock_outline,
-              color: iconColor,
-            ),
-            const SizedBox(
-              width: 18,
-            ),
-            Expanded(
-              child: TextFormField(
-                controller: passwordController,
-                style: poppinsTextStyle,
-                obscureText: showPassword,
-                decoration: InputDecoration(
-                  suffixIcon: Builder(
-                    builder: (context) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            showPassword = !showPassword;
-                          });
-                        },
-                        child: Icon(
-                          showPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: iconColor,
-                        ),
-                      );
-                    },
-                  ),
-                  hintText: 'Password',
-                  hintStyle: placeholderTextStyle,
-                  border: InputBorder.none,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.25),
+                  spreadRadius: 0,
+                  blurRadius: 4,
+                  offset: const Offset(0, 4),
                 ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.lock_outline,
+                  color: iconColor,
+                ),
+                const SizedBox(
+                  width: 18,
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: passwordController,
+                    style: poppinsTextStyle,
+                    obscureText: showPassword,
+                    decoration: InputDecoration(
+                      suffixIcon: Builder(
+                        builder: (context) {
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                showPassword = !showPassword;
+                              });
+                            },
+                            child: Icon(
+                              showPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: iconColor,
+                            ),
+                          );
+                        },
+                      ),
+                      hintText: 'Password',
+                      hintStyle: placeholderTextStyle,
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(top: 10.0),
+            margin: const EdgeInsets.fromLTRB(40, 0, 30, 0),
+            child: Text(
+              "* Minimal 6 karakter",
+              style: TextStyle(
+                color: iconColor,
+                fontSize: 12.0,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 

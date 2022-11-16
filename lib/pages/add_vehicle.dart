@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/providers/vehicle_provider.dart';
-import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -138,6 +138,19 @@ class _AddVehicleState extends State<AddVehicle> {
               ),
             ),
           ),
+          text == 'Nomor Plat'
+              ? Container(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  margin: const EdgeInsets.fromLTRB(10, 0, 30, 0),
+                  child: Text(
+                    "* contoh: P 1234 JM",
+                    style: TextStyle(
+                      color: iconColor,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                )
+              : SizedBox(),
         ],
       );
     }

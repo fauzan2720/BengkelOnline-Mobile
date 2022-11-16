@@ -1,8 +1,10 @@
+import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/providers/product_provider.dart';
-import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/themes/themes.dart';
 import 'package:bengkel_online/widgets/loading_light_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({Key? key}) : super(key: key);
@@ -13,14 +15,35 @@ class SplashScreenPage extends StatefulWidget {
 
 class _SplashScreenPageState extends State<SplashScreenPage> {
   bool isLoading = false;
-  bool isLogedIn = false;
+  bool valueLogin = false;
+  String? getEmail, getPassword;
 
   @override
   Widget build(BuildContext context) {
-    // Future<bool> getLoginStatus() async {
-    //   SharedPreferences pref = await SharedPreferences.getInstance();
-    //   return pref.getBool("isLogedIn") ?? false;
-    // }
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    handleLogin() async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      getEmail = pref.getString("email") ?? '';
+      getPassword = pref.getString("password") ?? '';
+
+      if (await authProvider.login(
+        email: getEmail,
+        password: getPassword,
+      )) {
+        Navigator.pushReplacementNamed(context, 'home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: primaryColor,
+            content: const Text(
+              'Email atau Password yang dimasukkan salah!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+    }
 
     getInit() async {
       setState(() {
@@ -31,20 +54,14 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
       await Provider.of<ProductProvider>(context, listen: false)
           .getProductOils();
 
-      // getLoginStatus().then((status) {
-      //   isLogedIn = status;
-      //   setState(() {});
-      // });
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      getEmail = pref.getString("email") ?? '';
 
-      // print(isLogedIn);
-
-      // if (isLogedIn == true) {
-      //   Navigator.pushReplacementNamed(context, 'home');
-      // } else {
-      //   Navigator.pushNamed(context, 'login');
-      // }
-
-      Navigator.pushNamed(context, 'login');
+      if (getEmail != '') {
+        handleLogin();
+      } else {
+        Navigator.pushNamed(context, 'login');
+      }
 
       setState(() {
         isLoading = false;
@@ -95,7 +112,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
                 isLoading
                     ? const LoadingLightButton()
                     : Container(

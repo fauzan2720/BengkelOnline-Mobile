@@ -2,7 +2,7 @@ import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/providers/cart_provider.dart';
 import 'package:bengkel_online/providers/location_provider.dart';
 import 'package:bengkel_online/providers/product_provider.dart';
-import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/themes/themes.dart';
 import 'package:bengkel_online/widgets/cart_card.dart';
 import 'package:bengkel_online/widgets/loading_wdiget.dart';
 import 'package:flutter/material.dart';

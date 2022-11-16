@@ -7,7 +7,7 @@ import 'package:bengkel_online/providers/call_mechanic_provider.dart';
 import 'package:bengkel_online/providers/location_provider.dart';
 import 'package:bengkel_online/providers/product_provider.dart';
 import 'package:bengkel_online/providers/vehicle_provider.dart';
-import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/themes/themes.dart';
 import 'package:bengkel_online/widgets/loading_wdiget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +27,8 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
   double priceService = 50000;
   double priceOil = 0;
 
+  TextEditingController problemController = TextEditingController(text: '');
+
   @override
   Widget build(BuildContext context) {
     double totalPrice = (priceService + priceOil);
@@ -41,8 +43,6 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
     UserModel user = authProvider.user;
     VehicleModel vehicle = vehicleProvider.vehicles[0];
     LocationModel location = locationProvider.locations[0];
-
-    TextEditingController problemController = TextEditingController(text: '');
 
     handleShowVehicle() async {
       await Provider.of<VehicleProvider>(context, listen: false).getVehicles(
@@ -484,10 +484,9 @@ class _CallMechanicPageState extends State<CallMechanicPage> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  setState(() {
-                    _selectedPayment = value!;
-                    print('value payment gateway: $_selectedPayment');
-                  });
+                  _selectedPayment = value!;
+                  print('value payment gateway: $_selectedPayment');
+                  setState(() {});
                 },
               ),
             ),

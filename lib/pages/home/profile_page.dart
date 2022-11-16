@@ -1,11 +1,18 @@
 import 'package:bengkel_online/models/user_model.dart';
 import 'package:bengkel_online/providers/auth_provider.dart';
-import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  void emptyLoginStatus() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("email", '');
+    pref.setString("password", '');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +46,8 @@ class ProfilePage extends StatelessWidget {
                 Navigator.pop(context);
 
                 if (await authProvider.logout(user.token!)) {
+                  emptyLoginStatus();
+
                   Navigator.pushNamedAndRemoveUntil(
                       context, 'login', (route) => false);
                   ScaffoldMessenger.of(context).showSnackBar(

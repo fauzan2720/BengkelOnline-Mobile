@@ -1,5 +1,5 @@
 import 'package:bengkel_online/providers/auth_provider.dart';
-import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/themes/themes.dart';
 import 'package:bengkel_online/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -129,8 +129,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 color: Colors.white,
                 shape: CircleBorder(),
               ),
-              child: Image.asset(
-                'assets/img/logo.png',
+              child: Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Image.asset(
+                  'assets/img/logo.png',
+                ),
               ),
             ),
           ),
@@ -145,66 +148,84 @@ class _RegisterPageState extends State<RegisterPage> {
       bool obsureText,
       TextInputType keyboardType,
     ) {
-      return Container(
-        height: 50,
-        margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, 4),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 50,
+            margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
             ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Icon(
-              urlIcon,
-              color: iconColor,
-            ),
-            const SizedBox(
-              width: 18,
-            ),
-            Expanded(
-              child: TextFormField(
-                keyboardType: keyboardType,
-                obscureText: obsureText,
-                controller: controller,
-                style: poppinsTextStyle,
-                decoration: InputDecoration(
-                  suffixIcon: urlIcon == Icons.lock_outline
-                      ? Builder(
-                          builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  showPassword = !showPassword;
-                                });
-                              },
-                              child: Icon(
-                                showPassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: iconColor,
-                              ),
-                            );
-                          },
-                        )
-                      : null,
-                  hintText: placeholder,
-                  hintStyle: placeholderTextStyle,
-                  border: InputBorder.none,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.25),
+                  spreadRadius: 0,
+                  blurRadius: 4,
+                  offset: const Offset(0, 4),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+            child: Row(
+              children: [
+                Icon(
+                  urlIcon,
+                  color: iconColor,
+                ),
+                const SizedBox(
+                  width: 18,
+                ),
+                Expanded(
+                  child: TextFormField(
+                    keyboardType: keyboardType,
+                    obscureText: obsureText,
+                    controller: controller,
+                    style: poppinsTextStyle,
+                    decoration: InputDecoration(
+                      suffixIcon: urlIcon == Icons.lock_outline
+                          ? Builder(
+                              builder: (context) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      showPassword = !showPassword;
+                                    });
+                                  },
+                                  child: Icon(
+                                    showPassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: iconColor,
+                                  ),
+                                );
+                              },
+                            )
+                          : null,
+                      hintText: placeholder,
+                      hintStyle: placeholderTextStyle,
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          obsureText
+              ? Container(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  margin: const EdgeInsets.fromLTRB(40, 0, 30, 0),
+                  child: Text(
+                    "* Minimal 6 karakter",
+                    style: TextStyle(
+                      color: iconColor,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                )
+              : SizedBox(),
+        ],
       );
     }
 
@@ -215,66 +236,84 @@ class _RegisterPageState extends State<RegisterPage> {
       bool obsureText,
       TextInputType keyboardType,
     ) {
-      return Container(
-        height: 50,
-        margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.25),
-              spreadRadius: 0,
-              blurRadius: 4,
-              offset: const Offset(0, 4),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 50,
+            margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
             ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Icon(
-              urlIcon,
-              color: iconColor,
-            ),
-            const SizedBox(
-              width: 18,
-            ),
-            Expanded(
-              child: TextFormField(
-                keyboardType: keyboardType,
-                obscureText: obsureText,
-                controller: controller,
-                style: poppinsTextStyle,
-                decoration: InputDecoration(
-                  suffixIcon: urlIcon == Icons.lock_outline
-                      ? Builder(
-                          builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  showPassword2 = !showPassword2;
-                                });
-                              },
-                              child: Icon(
-                                showPassword2
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: iconColor,
-                              ),
-                            );
-                          },
-                        )
-                      : null,
-                  hintText: placeholder,
-                  hintStyle: placeholderTextStyle,
-                  border: InputBorder.none,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.25),
+                  spreadRadius: 0,
+                  blurRadius: 4,
+                  offset: const Offset(0, 4),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+            child: Row(
+              children: [
+                Icon(
+                  urlIcon,
+                  color: iconColor,
+                ),
+                const SizedBox(
+                  width: 18,
+                ),
+                Expanded(
+                  child: TextFormField(
+                    keyboardType: keyboardType,
+                    obscureText: obsureText,
+                    controller: controller,
+                    style: poppinsTextStyle,
+                    decoration: InputDecoration(
+                      suffixIcon: urlIcon == Icons.lock_outline
+                          ? Builder(
+                              builder: (context) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      showPassword2 = !showPassword2;
+                                    });
+                                  },
+                                  child: Icon(
+                                    showPassword2
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: iconColor,
+                                  ),
+                                );
+                              },
+                            )
+                          : null,
+                      hintText: placeholder,
+                      hintStyle: placeholderTextStyle,
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          obsureText
+              ? Container(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  margin: const EdgeInsets.fromLTRB(40, 0, 30, 0),
+                  child: Text(
+                    "* Minimal 6 karakter",
+                    style: TextStyle(
+                      color: iconColor,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                )
+              : SizedBox(),
+        ],
       );
     }
 

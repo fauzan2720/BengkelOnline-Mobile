@@ -2,7 +2,7 @@ import 'package:bengkel_online/models/user_model.dart';
 import 'package:bengkel_online/providers/auth_provider.dart';
 import 'package:bengkel_online/providers/product_provider.dart';
 import 'package:bengkel_online/providers/vehicle_provider.dart';
-import 'package:bengkel_online/util/themes.dart';
+import 'package:bengkel_online/themes/themes.dart';
 import 'package:bengkel_online/widgets/loading_wdiget.dart';
 import 'package:bengkel_online/widgets/product_card.dart';
 import 'package:flutter/material.dart';
@@ -221,10 +221,7 @@ class _HomePageState extends State<HomePage> {
                                 Row(
                                   children: productProvider.products
                                       .map(
-                                        (e) => Hero(
-                                          tag: "product",
-                                          child: ProductCard(e),
-                                        ),
+                                        (e) => ProductCard(e),
                                       )
                                       .toList(),
                                 ),
